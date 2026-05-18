@@ -81,6 +81,36 @@
     .sec-tag-bar  { width:3px; height:20px; background:var(--lime); border-radius:2px; flex-shrink:0; }
     .sec-tag-text { font-size:.78rem; font-weight:800; color:var(--lime); text-transform:uppercase; letter-spacing:1.8px; }
 
+    /* ══ CSS MARQUEE (GRAPHICS GALLERY) ══ */
+    @keyframes mq-left  { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+    @keyframes mq-right { 0% { transform:translateX(-50%); } 100% { transform:translateX(0); } }
+    
+    .mq-wrap  { overflow:hidden; width: 100vw; }
+    .mq-track {
+      display:flex; width:max-content; will-change:transform; direction:ltr; 
+    }
+    .mq-track.go-left  { animation:mq-left 35s linear infinite; }
+    .mq-track.go-right { animation:mq-right 35s linear infinite; }
+
+    .mq-item {
+      width:220px; height:220px; flex-shrink:0;
+      border-radius:1rem; overflow:hidden; margin:0 8px;
+      background:var(--card); border:1px solid var(--border);
+    }
+    .mq-item img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* ══ CSS TICKER (NUMBERS) ══ */
+    @keyframes tick-go  { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+    
+    .ticker-wrap  { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--card); width: 100vw; }
+    .ticker-track { display:flex; width:max-content; will-change:transform; direction:ltr; animation:tick-go 20s linear infinite; }
+    .ticker-item  {
+      display:flex; align-items:center; gap:.55rem;
+      padding:1rem 2.2rem; white-space:nowrap; border-left:1px solid var(--border);
+    }
+    .ticker-num   { font-size:1.4rem; font-weight:900; color:var(--lime); }
+    .ticker-label { font-size:.9rem; color:var(--grey); }
+
     /* ── Swiper ── */
     .swiper { width:100%; overflow:visible; padding-bottom:2.5rem !important; }
     .swiper-pagination-bullet { background:var(--border) !important; opacity:1 !important; width:8px !important; height:8px !important; }
@@ -124,6 +154,7 @@
       
       h1 { font-size: 2.2rem !important; line-height: 1.2 !important; }
       .blob { width: 300px !important; height: 300px !important; }
+      .mq-item { width:160px; height:160px; }
     }
 
     /* ── Team section ── */
@@ -326,6 +357,79 @@
     </div>
   </div>
 </section>
+
+<section style="padding:1.5rem 0 3rem; overflow:hidden;">
+  <div class="mq-wrap" style="margin-bottom:12px;">
+    <div class="mq-track go-left">
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80" alt="Graphic 1"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Graphic 2"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&q=80" alt="Graphic 3"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80" alt="Graphic 4"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80" alt="Graphic 5"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80" alt="Graphic 1"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Graphic 2"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&q=80" alt="Graphic 3"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80" alt="Graphic 4"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80" alt="Graphic 5"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80" alt="Graphic 1"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Graphic 2"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&q=80" alt="Graphic 3"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80" alt="Graphic 4"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80" alt="Graphic 5"></div>
+    </div>
+  </div>
+
+  <div class="mq-wrap">
+    <div class="mq-track go-right">
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&q=80" alt="Graphic 6"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&q=80" alt="Graphic 7"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&q=80" alt="Graphic 8"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Graphic 9"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80" alt="Graphic 10"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&q=80" alt="Graphic 6"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&q=80" alt="Graphic 7"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&q=80" alt="Graphic 8"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Graphic 9"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80" alt="Graphic 10"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&q=80" alt="Graphic 6"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&q=80" alt="Graphic 7"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&q=80" alt="Graphic 8"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Graphic 9"></div>
+      <div class="mq-item"><img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80" alt="Graphic 10"></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<div class="ticker-wrap" style="padding:1rem 0;">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
+    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
+    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
+    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
+    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
+    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
+    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
+    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
+    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
+    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
+    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
+    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
+    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
+  </div>
+</div>
 
 <div class="divider"></div>
 
