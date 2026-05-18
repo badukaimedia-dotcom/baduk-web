@@ -21,6 +21,7 @@
     body  { font-family:'Assistant',sans-serif; background:var(--bg); color:#fff; overflow-x:hidden; font-size:17px; width: 100vw; }
     a     { text-decoration:none; color:inherit; }
     img   { max-width: 100%; height: auto; }
+    strong { color: #ffffff; font-weight: 800; }
 
     /* ── Lime ── */
     .lime        { color:var(--lime); }
@@ -72,7 +73,6 @@
     .wrap    { max-width:880px; margin:0 auto; padding:0 1.25rem; }
     .divider { height:1px; background:linear-gradient(to left,transparent,var(--border),transparent); width:100%; }
 
-    /* Fix Reveal Animation so nothing disappears on mobile */
     .reveal { opacity:1; transition:opacity .7s ease,transform .7s ease; }
     .revealed { opacity:1; transform:translateY(0); }
 
@@ -80,19 +80,6 @@
     .sec-tag      { display:flex; align-items:center; gap:.55rem; margin-bottom:1rem; }
     .sec-tag-bar  { width:3px; height:20px; background:var(--lime); border-radius:2px; flex-shrink:0; }
     .sec-tag-text { font-size:.78rem; font-weight:800; color:var(--lime); text-transform:uppercase; letter-spacing:1.8px; }
-
-    /* ══ CSS MARQUEE ══ */
-    @keyframes tick-go  { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
-
-    /* ── Ticker items ── */
-    .ticker-wrap  { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--card); width: 100vw; }
-    .ticker-track { display:flex; width:max-content; will-change:transform; direction:ltr; animation:tick-go 20s linear infinite; }
-    .ticker-item  {
-      display:flex; align-items:center; gap:.55rem;
-      padding:1rem 2.2rem; white-space:nowrap; border-left:1px solid var(--border);
-    }
-    .ticker-num   { font-size:1.4rem; font-weight:900; color:var(--lime); }
-    .ticker-label { font-size:.9rem; color:var(--grey); }
 
     /* ── Swiper ── */
     .swiper { width:100%; overflow:visible; padding-bottom:2.5rem !important; }
@@ -159,11 +146,11 @@
     .team-body { padding:1.4rem 1.3rem 1.6rem; }
     .team-name { font-size:1.2rem; font-weight:900; color:#fff; margin-bottom:.15rem; }
     .team-role { font-size:.8rem; font-weight:700; color:var(--lime); text-transform:uppercase; letter-spacing:1px; margin-bottom:.9rem; }
-    .team-bio  { font-size:.92rem; color:var(--grey); line-height:1.85; display:flex; flex-direction:column; gap:.4rem; }
+    .team-bio  { font-size:.95rem; color:var(--grey); line-height:1.7; display:flex; flex-direction:column; gap:.6rem; }
     .team-quote {
-      margin-top:1rem; padding:.9rem 1rem; border-radius:.9rem;
+      margin-top:1.2rem; padding:.9rem 1rem; border-radius:.9rem;
       background:rgba(199,255,0,.05); border-right:3px solid var(--lime);
-      font-size:.88rem; color:#ddd; font-style:italic; line-height:1.7;
+      font-size:.9rem; color:#ddd; font-style:italic; line-height:1.7;
     }
 
     /* ── Qualification cards ── */
@@ -173,10 +160,10 @@
     /* ── Pain bento ── */
     .pain-card {
       background:var(--card); border:1px solid var(--border); border-radius:1.1rem;
-      padding:1.4rem 1.5rem;
+      padding:1.6rem 1.5rem;
     }
-    .pain-title { font-size:1.05rem; font-weight:800; margin-bottom:.4rem; color: #fff;}
-    .pain-desc { font-size:.92rem; color:var(--grey); line-height:1.6; }
+    .pain-title { font-size:1.15rem; font-weight:800; margin-bottom:.8rem; color: #fff;}
+    .pain-desc { font-size:.98rem; color:var(--grey); line-height:1.6; display:flex; flex-direction:column; gap:.6rem; }
 
     /* ── Form ── */
     .field {
@@ -253,14 +240,14 @@
 
     <h1 style="font-size:clamp(2.4rem,8vw,5rem);font-weight:900;line-height:1.1;margin-bottom:1.4rem;letter-spacing:-.02em;">
       יצירת תוכן AI.<br>
-      <span class="lime lime-shadow">פחות הפקה, יותר המרה. זה בדוק.</span>
+      <span class="lime lime-shadow" style="font-size:clamp(1.5rem,4vw,2.5rem); display:block; margin-top:0.4em;">פחות הפקה, יותר המרה. זה בדוק.</span>
     </h1>
 
     <div style="font-size:clamp(1rem,2.3vw,1.18rem);color:var(--grey);max-width:640px;margin:0 auto 2.4rem;display:flex;flex-direction:column;gap:.65rem;text-align:center;line-height:1.5;">
       <p>הגיע הזמן לדלג מעל הלוגיסטיקה של העולם הישן.</p>
       <p>אנחנו מייצרים עבור העסק שלכם סרטוני פרסום חדים ברמת גימור קולנועית ובשנינות ישראלית,</p>
       <p>בלי שחקנים ובלי לשרוף עשרות אלפי שקלים על ימי הפקה מורכבים.</p>
-      <p style="color:#eee;font-weight:700;">שילוב מדויק בין אסטרטגיה שיווקית לביצוע בAI שמביא תוצאות.</p>
+      <p><strong>שילוב מדויק בין אסטרטגיה שיווקית לביצוע בAI שמביא תוצאות.</strong></p>
     </div>
 
     <a href="#contact" class="btn-lime btn-pulse" style="padding:20px 46px;font-size:clamp(1.05rem,2.5vw,1.25rem);">
@@ -342,37 +329,6 @@
 
 <div class="divider"></div>
 
-<div class="ticker-wrap" style="padding:1rem 0;">
-  <div class="ticker-track">
-    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
-    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
-    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
-    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
-    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
-    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
-    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
-    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
-    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
-    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
-    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
-    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
 <section id="problem" style="padding:2.8rem 1.25rem;">
   <div style="max-width:880px;margin:0 auto;">
 
@@ -383,7 +339,7 @@
         <span class="lime">הם צודקים, אבל פה בדיוק אתם נתקעים.</span>
       </h2>
       <div style="color:var(--grey);font-size:1.02rem;display:flex;flex-direction:column;gap:.4rem;">
-        <p>היום כבר כולם מבינים שהשיווק שלכם יקום או ייפול על דבר אחד בלבד: רמת הקריאייטיב שאתם מעלים לאוויר.</p>
+        <p>היום כבר כולם מבינים שהשיווק שלכם יקום או ייפול על דבר אחד בלבד: <strong>רמת הקריאייטיב שאתם מעלים לאוויר.</strong></p>
         <p>אבל כשמנסים ליישם את זה בשטח, פוגשים קיר בטון של שתי בעיות מרכזיות:</p>
       </div>
     </div>
@@ -392,11 +348,11 @@
       <div class="card" style="padding:1.8rem 1.6rem;">
         <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
           <div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">01</div>
-          <h3 style="font-size:1.08rem;font-weight:900;color:#fff;">המחסום הראשון: יש גבול לאיכות התוכן שאתם יכולים לייצר</h3>
+          <h3 style="font-size:1.08rem;font-weight:900;color:#fff;">יש גבול לאיכות התוכן שאתם יכולים לייצר</h3>
         </div>
-        <div style="color:var(--grey);font-size:1rem;display:flex;flex-direction:column;gap:.45rem;">
-          <p>כדי לייצר סרטון אחד שנראה פרימיום, שנון וקולנועי, אתם צריכים להשקיע ימים של עבודה, לכתוב תסריט, לצלם, לערוך ולתקן.</p>
-          <p>הסטנדרט ברשתות החברותיות עלה, ואין לכם את הזמן או הכלים להגיע לרמת הגימור שמותג מוביל צריך.</p>
+        <div class="pain-desc">
+          <p>כדי לייצר סרטון אחד שנראה <strong>פרימיום, שנון וקולנועי</strong>, אתם צריכים להשקיע ימים של עבודה, לכתוב תסריט, לצלם, לערוך ולתקן.</p>
+          <p>הסטנדרט ברשתות החברותיות עלה, ואין לכם את <strong>הזמן או הכלים</strong> להגיע לרמת הגימור שמותג מוביל צריך.</p>
           <p style="color:var(--lime);font-weight:700;margin-top:.3rem;">(טוב, אלא אם כן אתם עובדים איתנו, ואז השמיים הם הגבול 😉)</p>
         </div>
       </div>
@@ -404,13 +360,12 @@
       <div class="card" style="padding:1.8rem 1.6rem;">
         <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
           <div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">02</div>
-          <h3 style="font-size:1.08rem;font-weight:900;color:#fff;">המחסום השני: יש גבול לכמות התוכן שאתם יכולים לבדוק</h3>
+          <h3 style="font-size:1.08rem;font-weight:900;color:#fff;">יש גבול לכמות התוכן שאתם יכולים לבדוק</h3>
         </div>
-        <div style="color:var(--grey);font-size:1rem;display:flex;flex-direction:column;gap:.45rem;">
-          <p>שיווק הוא לא קסם, הוא מדע של ניסוי וטעייה.</p>
-          <p>כדי לפצח מסר שיווקי אחד, אתם חייבים לתקוף אותו מכמה היבטים שונים, לבחון זוויות קופי שונות,</p>
-          <p>ולייצר וריאציות בכמויות גבוהות כדי לראות מה באמת מביא תוצאות.</p>
-          <p>בעולם הישן, לעשות את זה אומר לשרוף עשרות אלפי שקלים רק על ימי הפקה חוזרים.</p>
+        <div class="pain-desc">
+          <p>שיווק הוא לא קסם, הוא <strong>מדע של ניסוי וטעייה.</strong></p>
+          <p>כדי לפצח מסר שיווקי אחד, אתם חייבים לתקוף אותו מכמה היבטים שונים, לבחון זוויות קופי שונות, <strong>ולייצר וריאציות בכמויות גבוהות</strong> כדי לראות מה באמת מביא תוצאות.</p>
+          <p>בעולם הישן, לעשות את זה אומר לשרוף <strong>עשרות אלפי שקלים</strong> רק על ימי הפקה חוזרים.</p>
         </div>
       </div>
     </div>
@@ -420,10 +375,10 @@
         בשנת 2026, הסיכוי שלכם לתפוס את תשומת הלב של הלקוח בפיד הוא כמעט אפסי.
         <span style="font-size:.82rem;color:var(--grey);font-weight:400;">(שוב, לא כשאתם איתנו, כן?)</span>
       </h3>
-      <div style="color:var(--grey);font-size:1rem;display:flex;flex-direction:column;gap:.45rem;">
-        <p>אבל בואו נניח שהצלחתם. הגולש עצר את האצבע. עכשיו מגיעה השאלה האמיתית: האם זאת הגישה הנכונה שתגרום לו לסמוך עליכם ולהתקדם דווקא אתכם? האם המסר שלכם עובר בצורה מדויקת או שהוא סתם ראה עוד סרטון נחמד והמשיך לגלול?</p>
-        <p style="margin-top:.5rem;">בדיוק בגלל זה הקמנו את <span class="lime" style="font-weight:700;">Baduk AI.</span> אנחנו לא כאן בשביל לייצר לכם "סרטונים יפים" שיקבלו לייקים מהחברים. אנחנו כאן כדי לבנות לעסק שלכם מכונת קריאייטיב שעובדת על דלק מטוסים.</p>
-        <p style="margin-top:.5rem;">אנחנו לוקחים את המסר שלכם, מפצחים אותו אסטרטגית, ומייצרים ממנו זוויות ויזואליות שנונות וממירות בבינה מלאכותית בקצב ובאיכות שהמתחרים שלכם לא יצליחו להבין מאיפה זה נחת עליהם.</p>
+      <div style="color:var(--grey);font-size:1rem;display:flex;flex-direction:column;gap:.55rem;">
+        <p>אבל בואו נניח שהצלחתם. הגולש עצר את האצבע. עכשיו מגיעה השאלה האמיתית: <strong>האם זאת הגישה הנכונה שתגרום לו לסמוך עליכם ולהתקדם דווקא אתכם?</strong> האם המסר שלכם עובר בצורה מדויקת או שהוא סתם ראה עוד סרטון נחמד והמשיך לגלול?</p>
+        <p>בדיוק בגלל זה הקמנו את <span class="lime" style="font-weight:700;">Baduk AI.</span> אנחנו לא כאן בשביל לייצר לכם "סרטונים יפים" שיקבלו לייקים מהחברים. <strong>אנחנו כאן כדי לבנות לעסק שלכם מכונת קריאייטיב שעובדת על דלק מטוסים.</strong></p>
+        <p>אנחנו לוקחים את המסר שלכם, מפצחים אותו אסטרטגית, ומייצרים ממנו <strong>זוויות ויזואליות שנונות וממירות בבינה מלאכותית</strong> בקצב ובאיכות שהמתחרים שלכם לא יצליחו להבין מאיפה זה נחת עליהם.</p>
       </div>
     </div>
 
@@ -456,9 +411,9 @@
           <div class="team-name">לירן יצחקי</div>
           <div class="team-role">בעלים</div>
           <div class="team-bio">
-            <p>מגיע מעולמות העיצוב הגרפי ועריכת הווידאו, מומחה בהפיכת רעיון מופשט ליצירת מופת קולנועית.</p>
-            <p>מאחוריו ניסיון שטח עשיר מול החברות, הארגונים ובעלי העסקים המובילים בישראל, עבורם ייצר במו ידיו למעלה מ1,000 פיסות תוכן שסביר להניח שכבר נחשפתם אליהן בפיד שלכם בלי לדעת שהוא חתום עליהן.</p>
-            <p>משנת 2025 הצטרף למהפכת הAI והפך לאמן תוכן מבוסס בינה מלאכותית שלא משאיר קצוות פתוחים.</p>
+            <p>מגיע מעולמות העיצוב הגרפי ועריכת הווידאו, <strong>מומחה בהפיכת רעיון מופשט ליצירת מופת קולנועית.</strong></p>
+            <p>מאחוריו ניסיון שטח עשיר מול החברות, הארגונים ובעלי העסקים המובילים בישראל, עבורם ייצר במו ידיו <strong>למעלה מ1,000 פיסות תוכן</strong> שסביר להניח שכבר נחשפתם אליהן בפיד שלכם בלי לדעת שהוא חתום עליהן.</p>
+            <p>משנת 2025 הצטרף למהפכת הAI והפך <strong>לאמן תוכן מבוסס בינה מלאכותית</strong> שלא משאיר קצוות פתוחים.</p>
           </div>
           <div class="team-quote">
             "פעם לייצר תוכן הרגיש כמו לנסוע על מרצדס, היום אני טס בחללית. עוד לא נתקלתי בצורך ויזואלי שלא הצלחתי להביא לידי יישום."
@@ -478,9 +433,9 @@
           <div class="team-name">עידו צפניה</div>
           <div class="team-role">בעלים</div>
           <div class="team-bio">
-            <p>מגיע מעולמות השיווק והמכירות, עם למעלה מ-5 שנות ניסיון מעשי בשטח בבניית משפכי שיווק מורכבים עבור בעלי העסקים ויוצרי תוכן בארץ.</p>
-            <p>מאחוריו תכנון והובלה של מערכים שיווקיים שלמים מדפי נחיתה ממירים ועד לקמפיינים ממומנים שהניבו החזרי השקעה גבוהים במיוחד.</p>
-            <p>המוח האסטרטגי שמפצח את המסרים ומבטיח שהוויזואל המשוגע יתורגם ישירות לשורה התחתונה.</p>
+            <p>מגיע מעולמות השיווק והמכירות, עם <strong>למעלה מ-5 שנות ניסיון מעשי בשטח</strong> בבניית משפכי שיווק מורכבים עבור בעלי העסקים ויוצרי תוכן בארץ.</p>
+            <p>מאחוריו תכנון והובלה של מערכים שיווקיים שלמים מדפי נחיתה ממירים <strong>ועד לקמפיינים ממומנים שהניבו החזרי השקעה גבוהים במיוחד.</strong></p>
+            <p>המוח האסטרטגי שמפצח את המסרים ומבטיח שהוויזואל המשוגע <strong>יתורגם ישירות לשורה התחתונה.</strong></p>
           </div>
           <div class="team-quote">
             "המכירה האמיתית מתחילה בשיווק. שיווק טוב מעביר את המסר לאורכו ולרוחבו, ומכין את הלקוח לקנייה עוד לפני שבכלל נוצרה איתו האינטראקציה הראשונה."
@@ -512,7 +467,7 @@
         <div>
           <div style="font-weight:800;color:#fff;font-size:1.02rem;margin-bottom:.4rem;">אנחנו לא פס ייצור המוני.</div>
           <div style="color:var(--grey);font-size:.98rem;display:flex;flex-direction:column;gap:.3rem;">
-            <p>כדי להביא את התוצאות שאנחנו מתחייבים אליהן, אנחנו משקיעים בכל פרויקט את מלוא המשאבים האסטרטגיים והוויזואליים שלנו. בגלל זה, אנחנו מגבילים באופן קשיח את כמות הלקוחות שאנחנו מקבלים בכל חודש.</p>
+            <p>כדי להביא את התוצאות שאנחנו מתחייבים אליהן, אנחנו משקיעים בכל פרויקט את <strong>מלוא המשאבים האסטרטגיים והוויזואליים שלנו.</strong> בגלל זה, אנחנו מגבילים באופן קשיח את כמות הלקוחות שאנחנו מקבלים בכל חודש.</p>
           </div>
         </div>
       </div>
@@ -522,7 +477,7 @@
         <div>
           <div style="font-weight:800;color:#fff;font-size:1.02rem;margin-bottom:.4rem;">כל סרטון עובר דרך הידיים שלנו.</div>
           <div style="color:var(--grey);font-size:.98rem;display:flex;flex-direction:column;gap:.3rem;">
-            <p>בניגוד לסוכנויות הגדולות, אצלנו אתם לא משלמים כסף רק כדי שיעבירו אתכם לפרילאנסר חיצוני או למתמחה שיעשה עליכם סטאז'. כל סרטון, כל מסר וכל קריאייטיב מיוצר ועובר ישירות דרך הידיים שלנו צוות מקצוען ומצומצם של אנשים עם למעלה מ-5 שנות ניסיון בשטח בעולמות השיווק והקריאייטיב.</p>
+            <p>בניגוד לסוכנויות הגדולות, אצלנו אתם לא משלמים כסף רק כדי שיעבירו אתכם לפרילאנסר חיצוני או למתמחה שיעשה עליכם סטאז'. <strong>כל סרטון, כל מסר וכל קריאייטיב מיוצר ועובר ישירות דרך הידיים שלנו</strong> צוות מקצוען ומצומצם של אנשים עם למעלה מ-5 שנות ניסיון בשטח בעולמות השיווק והקריאייטיב.</p>
           </div>
         </div>
       </div>
@@ -532,7 +487,7 @@
         <div>
           <div style="font-weight:800;color:#fff;font-size:1.02rem;margin-bottom:.4rem;">מחפשים "סרטוני AI זולים" לסמן וי? אנחנו לא הכתובת.</div>
           <div style="color:var(--grey);font-size:.98rem;display:flex;flex-direction:column;gap:.3rem;">
-            <p>אם אתם מחפשים עוד חברת מדיה גנרית אנחנו פשוט לא הכתובת. אבל אם יש לכם מוצר מעולה, תקציב פרסום קיים, ואתם מבינים שהתוכן שלכם בדיגיטל משפיע בצורה ישירה על כמה כסף ייכנס בסוף החודש בואו נדבר.</p>
+            <p>אם אתם מחפשים עוד חברת מדיה גנרית <strong>אנחנו פשוט לא הכתובת.</strong> אבל אם יש לכם מוצר מעולה, תקציב פרסום קיים, ואתם מבינים <strong>שהתוכן שלכם בדיגיטל משפיע בצורה ישירה על כמה כסף ייכנס בסוף החודש</strong> בואו נדבר.</p>
           </div>
         </div>
       </div>
