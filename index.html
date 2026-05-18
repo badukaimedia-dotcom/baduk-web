@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Baduk AI – בדוק שזה AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -17,9 +17,10 @@
       --grey:   #CCCCCC;
     }
     *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-    html  { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; }
-    body  { font-family:'Assistant',sans-serif; background:var(--bg); color:#fff; overflow-x:hidden; font-size:17px; }
+    html  { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+    body  { font-family:'Assistant',sans-serif; background:var(--bg); color:#fff; overflow-x:hidden; font-size:17px; width: 100vw; }
     a     { text-decoration:none; color:inherit; }
+    img   { max-width: 100%; height: auto; }
 
     /* ── Lime ── */
     .lime        { color:var(--lime); }
@@ -69,9 +70,9 @@
 
     /* ── Layout ── */
     .wrap    { max-width:880px; margin:0 auto; padding:0 1.25rem; }
-    .divider { height:1px; background:linear-gradient(to left,transparent,var(--border),transparent); }
+    .divider { height:1px; background:linear-gradient(to left,transparent,var(--border),transparent); width:100%; }
 
-    /* Fix Black Screen Bug: Set opacity to 1 by default */
+    /* Fix Reveal Animation so nothing disappears on mobile */
     .reveal { opacity:1; transition:opacity .7s ease,transform .7s ease; }
     .revealed { opacity:1; transform:translateY(0); }
 
@@ -81,11 +82,11 @@
     .sec-tag-text { font-size:.78rem; font-weight:800; color:var(--lime); text-transform:uppercase; letter-spacing:1.8px; }
 
     /* ══ CSS MARQUEE ══ */
-    @keyframes tick-go  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes tick-go  { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
 
     /* ── Ticker items ── */
-    .ticker-wrap  { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--card); }
-    .ticker-track { display:flex; width:max-content; will-change:transform; direction:ltr; animation:tick-go 30s linear infinite; }
+    .ticker-wrap  { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--card); width: 100vw; }
+    .ticker-track { display:flex; width:max-content; will-change:transform; direction:ltr; animation:tick-go 20s linear infinite; }
     .ticker-item  {
       display:flex; align-items:center; gap:.55rem;
       padding:1rem 2.2rem; white-space:nowrap; border-left:1px solid var(--border);
@@ -121,10 +122,24 @@
     .vid-label { position:absolute; bottom:.9rem; right:.9rem; left:.9rem; }
     .vid-tag   { display:inline-block; background:var(--lime); color:#050505; font-size:.7rem; font-weight:900; padding:3px 10px; border-radius:99px; margin-bottom:.3rem; }
 
-    /* ── Team section ── */
+    /* ── Grids (Desktop) ── */
     .team-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
-    @media(max-width:640px) { .team-grid { grid-template-columns:1fr; } }
+    .pain-bento { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .budget-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.6rem; }
 
+    /* ── RESPONSIVE MOBILE FIXES ── */
+    @media (max-width: 768px) {
+      .team-grid { grid-template-columns:1fr; }
+      .pain-bento { grid-template-columns:1fr; }
+      .form-row { grid-template-columns:1fr; }
+      .budget-grid { grid-template-columns:1fr; }
+      
+      h1 { font-size: 2.2rem !important; line-height: 1.2 !important; }
+      .blob { width: 300px !important; height: 300px !important; }
+    }
+
+    /* ── Team section ── */
     .team-card { border-radius:1.4rem; overflow:hidden; background:var(--card); border:1px solid var(--border); }
     .team-photo {
       width:100%; height:220px; overflow:hidden; position:relative;
@@ -152,15 +167,16 @@
     }
 
     /* ── Qualification cards ── */
-    .q-card { display:flex; align-items:flex-start; gap:.9rem; padding:1.4rem 1.5rem; border-radius:1.1rem; border:1px solid var(--border); background:var(--card); }
+    .q-card { display:flex; align-items:flex-start; gap:.9rem; padding:1.4rem 1.5rem; border-radius:1.1rem; border:1px solid var(--border); background:var(--card); margin-bottom: 0.85rem;}
     .q-icon { width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; margin-top:1px; }
 
     /* ── Pain bento ── */
     .pain-card {
       background:var(--card); border:1px solid var(--border); border-radius:1.1rem;
-      padding:1.4rem 1.5rem; margin-bottom:1rem;
+      padding:1.4rem 1.5rem;
     }
-    .pain-title { font-size:1.05rem; font-weight:800; margin-bottom:.4rem; }
+    .pain-title { font-size:1.05rem; font-weight:800; margin-bottom:.4rem; color: #fff;}
+    .pain-desc { font-size:.92rem; color:var(--grey); line-height:1.6; }
 
     /* ── Form ── */
     .field {
@@ -193,11 +209,6 @@
     /* ── Blob ── */
     .blob { position:absolute; border-radius:50%; filter:blur(50px); pointer-events:none; }
 
-    /* ── Noise ── */
-    body::after {
-      content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:.18;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-    }
   </style>
 </head>
 <body>
@@ -240,9 +251,9 @@
       מתאים לבעלי עסקים או סוכנויות שיווק שמשווקות ברשתות ועושות מעל 20,000 ש"ח בחודש
     </div>
 
-    <h1 style="font-size:clamp(2.6rem,8.5vw,5.8rem);font-weight:900;line-height:1.05;margin-bottom:1.4rem;letter-spacing:-.02em;">
+    <h1 style="font-size:clamp(2.4rem,8vw,5rem);font-weight:900;line-height:1.1;margin-bottom:1.4rem;letter-spacing:-.02em;">
       יצירת תוכן AI.<br>
-      <span class="lime lime-shadow" style="font-size:clamp(1.5rem,4vw,2.5rem); display:block; margin-top:0.4em;">פחות הפקה, יותר המרה. זה בדוק.</span>
+      <span class="lime lime-shadow">פחות הפקה, יותר המרה. זה בדוק.</span>
     </h1>
 
     <div style="font-size:clamp(1rem,2.3vw,1.18rem);color:var(--grey);max-width:640px;margin:0 auto 2.4rem;display:flex;flex-direction:column;gap:.65rem;text-align:center;line-height:1.5;">
@@ -323,30 +334,6 @@
           </div>
         </div>
 
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#161010,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.08) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">High-Ticket</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">פרמיום – קורס דיגיטלי</div></div>
-          </div>
-        </div>
-
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d0e18,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.1) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">לידים</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">ניקוי ספות – קמפיין לידים</div></div>
-          </div>
-        </div>
-
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#111818,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.11) 0%,transparent 60%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">מסעדנות</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">מותג מזון – ויזואל קולנועי</div></div>
-          </div>
-        </div>
-
       </div>
       <div class="swiper-pagination" style="bottom:0;"></div>
     </div>
@@ -401,7 +388,7 @@
       </div>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:.9rem;" class="reveal">
+    <div class="pain-bento reveal">
       <div class="card" style="padding:1.8rem 1.6rem;">
         <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
           <div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">01</div>
@@ -567,7 +554,7 @@
         </h3>
         
         <form id="contactForm" onsubmit="handleSubmit(event)" style="margin-top: 1.5rem;">
-          <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="form-row">
             <div>
               <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">שם מלא *</label>
               <input type="text" placeholder="הכנס שם מלא" class="field" required>
@@ -576,26 +563,26 @@
               <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">טלפון ישיר *</label>
               <input type="tel" placeholder="05X-XXXXXXX" class="field" dir="ltr" pattern="[0-9]+" inputmode="numeric" title="נא להזין ספרות בלבד" required>
             </div>
-            <div>
-              <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">אימייל *</label>
-              <input type="email" placeholder="email@example.com" class="field" dir="ltr" required>
-            </div>
-            <div>
-              <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">תחום העסק / קישור לאתר או לדף *</label>
-              <input type="text" placeholder='תחום העסק / אתר' class="field" required>
-            </div>
-            <div>
-              <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.7rem;">תקציב פרסום חודשי בממומן:</label>
-              <div style="display:flex;flex-direction:column;gap:.6rem;">
-                <label class="radio-item"><input type="checkbox" name="budget[]" value="under10k"><div class="radio-dot"></div><span class="radio-label">פחות מ-10,000 ש"ח חודשי</span></label>
-                <label class="radio-item"><input type="checkbox" name="budget[]" value="10k-30k"><div class="radio-dot"></div><span class="radio-label">10,000 ש"ח – 30,000 ש"ח חודשי</span></label>
-                <label class="radio-item"><input type="checkbox" name="budget[]" value="over30k"><div class="radio-dot"></div><span class="radio-label">מעל 30,000 ש"ח חודשי</span></label>
-              </div>
-            </div>
-            <button type="submit" class="btn-lime lime-glow" style="padding:18px;font-size:1.1rem;border-radius:1.1rem;width:100%;margin-top:.2rem;color:#050505;">
-              שליחת בקשה לבדיקת התאמה ←
-            </button>
           </div>
+          <div style="margin-top: 1rem;">
+            <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">אימייל *</label>
+            <input type="email" placeholder="email@example.com" class="field" dir="ltr" required>
+          </div>
+          <div style="margin-top: 1rem;">
+            <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">תחום העסק / קישור לאתר או לדף *</label>
+            <input type="text" placeholder='תחום העסק / אתר' class="field" required>
+          </div>
+          <div style="margin-top: 1rem;">
+            <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.7rem;">תקציב פרסום חודשי בממומן:</label>
+            <div class="budget-grid">
+              <label class="radio-item"><input type="checkbox" name="budget[]" value="under10k"><div class="radio-dot"></div><span class="radio-label">פחות מ-10,000 ₪</span></label>
+              <label class="radio-item"><input type="checkbox" name="budget[]" value="10k-30k"><div class="radio-dot"></div><span class="radio-label">10,000 ₪ – 30,000 ₪</span></label>
+              <label class="radio-item"><input type="checkbox" name="budget[]" value="over30k"><div class="radio-dot"></div><span class="radio-label">מעל 30,000 ₪</span></label>
+            </div>
+          </div>
+          <button type="submit" class="btn-lime lime-glow" style="padding:18px;font-size:1.1rem;border-radius:1.1rem;width:100%;margin-top:1.5rem;color:#050505;">
+            שליחת בקשה לבדיקת התאמה ←
+          </button>
         </form>
 
         <div id="form-success" style="display:none;text-align:center;padding:2rem 0;">
