@@ -76,7 +76,7 @@
     .reveal { opacity:1; transition:opacity .7s ease,transform .7s ease; }
     .revealed { opacity:1; transform:translateY(0); }
 
-    /* ── Section tag (UPDATED SIZE) ── */
+    /* ── Section tag ── */
     .sec-tag      { display:flex; align-items:center; gap:.6rem; margin-bottom:1.2rem; }
     .sec-tag-bar  { width:4px; height:24px; background:var(--lime); border-radius:2px; flex-shrink:0; }
     .sec-tag-text { font-size:1.15rem; font-weight:900; color:var(--lime); text-transform:uppercase; letter-spacing:1px; }
@@ -104,14 +104,6 @@
       0% { transform: translateX(-100%); }
       100% { transform: translateX(0); }
     }
-
-    /* ── Image squares ── */
-    .img-sq {
-      width:164px; height:164px; border-radius:1rem; flex-shrink:0;
-      border:1px solid var(--border); overflow:hidden; position:relative;
-      margin: 0 6px;
-    }
-    .img-sq img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     /* ── Text Ticker ── */
     .ticker-container { border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--card); margin-bottom: 1rem;}
@@ -165,7 +157,6 @@
       
       h1 { font-size: 2.2rem !important; line-height: 1.2 !important; }
       .blob { width: 300px !important; height: 300px !important; }
-      .img-sq { width:160px; height:160px; }
     }
 
     /* ── Team section ── */
@@ -209,6 +200,7 @@
     }
     .pain-title { font-size:1.15rem; font-weight:800; margin-bottom:.8rem; color: #fff;}
     .pain-desc { font-size:.98rem; color:var(--grey); line-height:1.6; display:flex; flex-direction:column; gap:.6rem; }
+    .pain-box-title { font-size:1.2rem; font-weight: 900; color: #fff; margin:0; line-height: 1.3;}
 
     /* ── Form ── */
     .field {
@@ -372,50 +364,6 @@
   </div>
 </section>
 
-<section style="padding:1.5rem 0 3rem;">
-  <div class="marquee-wrapper" style="margin-bottom:12px;">
-    <div class="marquee-track left">
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80" alt="Graphic 1"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Graphic 2"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&q=80" alt="Graphic 3"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80" alt="Graphic 4"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80" alt="Graphic 5"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80" alt="Graphic 6"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=400&q=80" alt="Graphic 7"></div>
-    </div>
-    <div class="marquee-track left">
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80" alt="Graphic 1"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Graphic 2"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=400&q=80" alt="Graphic 3"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80" alt="Graphic 4"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80" alt="Graphic 5"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80" alt="Graphic 6"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=400&q=80" alt="Graphic 7"></div>
-    </div>
-  </div>
-
-  <div class="marquee-wrapper">
-    <div class="marquee-track right">
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&q=80" alt="Graphic 8"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&q=80" alt="Graphic 9"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&q=80" alt="Graphic 10"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Graphic 11"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80" alt="Graphic 12"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&q=80" alt="Graphic 13"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Graphic 14"></div>
-    </div>
-    <div class="marquee-track right">
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&q=80" alt="Graphic 8"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&q=80" alt="Graphic 9"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&q=80" alt="Graphic 10"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Graphic 11"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80" alt="Graphic 12"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&q=80" alt="Graphic 13"></div>
-      <div class="img-sq"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Graphic 14"></div>
-    </div>
-  </div>
-</section>
-
 <div class="divider"></div>
 
 <div class="ticker-container" style="padding:1rem 0;">
@@ -460,11 +408,11 @@
       <div class="card" style="padding:1.8rem 1.6rem;">
         <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
           <div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">01</div>
-          <h3 style="font-size:1.08rem;font-weight:900;color:#fff;">יש גבול לאיכות התוכן שאתם יכולים לייצר</h3>
+          <h3 class="pain-box-title">מחסום האיכות: העולם הישן לא עומד בסטנדרט</h3>
         </div>
         <div class="pain-desc">
-          <p>כדי לייצר סרטון אחד שנראה <strong>פרימיום, שנון וקולנועי</strong>, אתם צריכים להשקיע ימים של עבודה, לכתוב תסריט, לצלם, לערוך ולתקן.</p>
-          <p>הסטנדרט ברשתות החברותיות עלה, ואין לכם את <strong>הזמן או הכלים</strong> להגיע לרמת הגימור שמותג מוביל צריך.</p>
+          <p><strong>המציאות בשטח:</strong> הסטנדרט ברשתות החברתיות עלה. פשוט אין לכם את <strong>הזמן או הכלים</strong> להגיע לרמת הגימור שמותג מוביל צריך.</p>
+          <p><strong>המכשול ההפקתי:</strong> כדי לייצר סרטון אחד שנראה <strong>פרימיום, שנון וקולנועי</strong>, אתם צריכים להשקיע ימים של עבודה, לכתוב תסריט, לצלם, לערוך ולתקן.</p>
           <p style="color:var(--lime);font-weight:700;margin-top:.3rem;">(טוב, אלא אם כן אתם עובדים איתנו, ואז השמיים הם הגבול 😉)</p>
         </div>
       </div>
@@ -472,12 +420,11 @@
       <div class="card" style="padding:1.8rem 1.6rem;">
         <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
           <div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">02</div>
-          <h3 style="font-size:1.08rem;font-weight:900;color:#fff;">יש גבול לכמות התוכן שאתם יכולים לבדוק</h3>
+          <h3 class="pain-box-title">מחסום הכמות: יש גבול לכמות הווריאציות שאתם יכולים לבדוק</h3>
         </div>
         <div class="pain-desc">
-          <p>שיווק הוא לא קסם, הוא <strong>מדע של ניסוי וטעייה.</strong></p>
-          <p>כדי לפצח מסר שיווקי אחד, אתם חייבים לתקוף אותו מכמה היבטים שונים, לבחון זוויות קופי שונות, <strong>ולייצר וריאציות בכמויות גבוהות</strong> כדי לראות מה באמת מביא תוצאות.</p>
-          <p>בעולם הישן, לעשות את זה אומר לשרוף <strong>עשרות אלפי שקלים</strong> רק על ימי הפקה חוזרים.</p>
+          <p><strong>האמת השיווקית:</strong> שיווק הוא לא קסם, הוא <strong>מדע של ניסוי וטעייה.</strong> כדי לפצח מסר שיווקי אחד, אתם חייבים לתקוף אותו מכמה היבטים שונים, לבחון זוויות קופי שונות.</p>
+          <p><strong>המכשול ההפקתי:</strong> לייצר וריאציות בכמויות גבוהות בעולם הישן אומר לשרוף <strong>עשרות אלפי שקלים</strong> רק על ימי הפקה חוזרים.</p>
         </div>
       </div>
     </div>
