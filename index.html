@@ -105,6 +105,14 @@
       100% { transform: translateX(0); }
     }
 
+    /* ── Image squares ── */
+    .img-sq {
+      width:164px; height:164px; border-radius:1rem; flex-shrink:0;
+      border:1px solid var(--border); overflow:hidden; position:relative;
+      margin: 0 6px;
+    }
+    .img-sq img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
     /* ── Text Ticker ── */
     .ticker-container { border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--card); margin-bottom: 1rem;}
     .ticker-item  {
@@ -126,21 +134,7 @@
       cursor:pointer; transition:transform .3s,border-color .3s;
     }
     .video-card:hover { transform:scale(1.02); border-color:rgba(199,255,0,.4); }
-    .vid-overlay {
-      position:absolute; inset:0;
-      background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.2) 55%,transparent 100%);
-      display:flex; align-items:center; justify-content:center;
-    }
-    .play-btn {
-      width:62px; height:62px; border-radius:50%;
-      background:rgba(199,255,0,.15); border:2.5px solid var(--lime);
-      display:flex; align-items:center; justify-content:center;
-      transition:transform .25s,background .25s; backdrop-filter:blur(8px);
-    }
-    .video-card:hover .play-btn { transform:scale(1.15); background:rgba(199,255,0,.28); }
-    .play-icon { width:0; height:0; border-style:solid; border-width:11px 0 11px 20px; border-color:transparent transparent transparent var(--lime); margin-right:-3px; }
-    .vid-label { position:absolute; bottom:.9rem; right:.9rem; left:.9rem; }
-    .vid-tag   { display:inline-block; background:var(--lime); color:#050505; font-size:.7rem; font-weight:900; padding:3px 10px; border-radius:99px; margin-bottom:.3rem; }
+    .vid-tag   { display:inline-block; background:var(--lime); color:#050505; font-size:.75rem; font-weight:900; padding:4px 12px; border-radius:99px; margin-bottom:.3rem; }
 
     /* ── Grids (Desktop) ── */
     .team-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
@@ -157,15 +151,25 @@
       
       h1 { font-size: 2.2rem !important; line-height: 1.2 !important; }
       .blob { width: 300px !important; height: 300px !important; }
+      .img-sq { width:160px; height:160px; }
     }
 
     /* ── Team section ── */
     .team-card { border-radius:1.4rem; overflow:hidden; background:var(--card); border:1px solid var(--border); }
     .team-photo {
-      width:100%; height:220px; overflow:hidden; position:relative;
-      background:linear-gradient(160deg,#111 0%,#050505 100%);
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+      background-color: #0c0c0c;
     }
-    .team-photo img { width:100%; height:100%; object-fit:cover; object-position:top; display:block; }
+    .team-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; 
+      object-position: center;
+      display: block;
+    }
     .team-photo-placeholder {
       position:absolute; inset:0; display:flex; flex-direction:column;
       align-items:center; justify-content:center; gap:.5rem;
@@ -186,8 +190,16 @@
       font-size:.9rem; color:#ddd; font-style:italic; line-height:1.7;
     }
 
-    /* ── Qualification cards (UPDATED LAYOUT) ── */
-    .q-card { background:var(--card); border:1px solid var(--border); border-radius:1.25rem; padding:1.8rem 1.6rem; margin-bottom: 1rem; }
+    /* ── Qualification cards ── */
+    .q-card {
+      background: linear-gradient(135deg, var(--card) 0%, rgba(199,255,0,0.03) 100%);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.8rem 1.6rem;
+      margin-bottom: 1rem;
+      transition: background 0.3s;
+    }
+    .q-card:hover { background: linear-gradient(135deg, var(--card) 0%, rgba(199,255,0,0.08) 100%); }
     .q-header { display:flex; align-items:center; gap:.75rem; margin-bottom:1rem; }
     .q-icon { width:38px; height:38px; border-radius:9px; background:rgba(199,255,0,.08); border:1px solid rgba(199,255,0,.2); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
     .q-title { font-size:1.15rem; font-weight:900; color:#fff; margin:0; }
@@ -304,57 +316,70 @@
 
         <div class="swiper-slide" style="max-width:230px;">
           <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a1a,#0d0d0d);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.09) 0%,transparent 60%);"></div><div style="position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">נדל"ן</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">פרויקט יוקרה – רמת השרון</div></div>
+            <iframe src="https://www.youtube.com/embed/WQtKGjyTAq4?autoplay=1&mute=1&loop=1&playlist=WQtKGjyTAq4&controls=0&playsinline=1&rel=0" 
+                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; pointer-events:none; z-index:0; transform: scale(1.05);" 
+                    allow="autoplay; encrypted-media"></iframe>
+            
+            <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 45%); z-index:1; pointer-events:none;"></div>
+            
+            <div class="vid-label" style="position:absolute; bottom:.9rem; right:.9rem; left:.9rem; z-index:2;">
+              <span class="vid-tag">נדל"ן</span>
+              <div style="font-size:.85rem;color:rgba(255,255,255,.95);margin-top:0.3rem;font-weight:700;">פרויקט יוקרה – רמת השרון</div>
+            </div>
           </div>
         </div>
 
         <div class="swiper-slide" style="max-width:230px;">
           <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0e1a0e,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.13) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">E-Commerce</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">קמפיין השקת מוצר</div></div>
+            <iframe src="https://www.youtube.com/embed/3SjTLk9ElLs?autoplay=1&mute=1&loop=1&playlist=3SjTLk9ElLs&controls=0&playsinline=1&rel=0" 
+                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; pointer-events:none; z-index:0; transform: scale(1.05);" 
+                    allow="autoplay; encrypted-media"></iframe>
+            
+            <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 45%); z-index:1; pointer-events:none;"></div>
+            
+            <div class="vid-label" style="position:absolute; bottom:.9rem; right:.9rem; left:.9rem; z-index:2;">
+              <span class="vid-tag">E-Commerce</span>
+              <div style="font-size:.85rem;color:rgba(255,255,255,.95);margin-top:0.3rem;font-weight:700;">קמפיין השקת מוצר</div>
+            </div>
           </div>
         </div>
 
         <div class="swiper-slide" style="max-width:230px;">
           <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#161010,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.08) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">High-Ticket</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">פרמיום – קורס דיגיטלי</div></div>
+            <iframe src="https://www.youtube.com/embed/WQtKGjyTAq4?autoplay=1&mute=1&loop=1&playlist=WQtKGjyTAq4&controls=0&playsinline=1&rel=0" 
+                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; pointer-events:none; z-index:0; transform: scale(1.05);" 
+                    allow="autoplay; encrypted-media"></iframe>
+            <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 45%); z-index:1; pointer-events:none;"></div>
+            <div class="vid-label" style="position:absolute; bottom:.9rem; right:.9rem; left:.9rem; z-index:2;">
+              <span class="vid-tag">High-Ticket</span>
+              <div style="font-size:.85rem;color:rgba(255,255,255,.95);margin-top:0.3rem;font-weight:700;">פרמיום – קורס דיגיטלי</div>
+            </div>
           </div>
         </div>
 
         <div class="swiper-slide" style="max-width:230px;">
           <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d0e18,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.1) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">לידים</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">ניקוי ספות – קמפיין לידים</div></div>
+            <iframe src="https://www.youtube.com/embed/3SjTLk9ElLs?autoplay=1&mute=1&loop=1&playlist=3SjTLk9ElLs&controls=0&playsinline=1&rel=0" 
+                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; pointer-events:none; z-index:0; transform: scale(1.05);" 
+                    allow="autoplay; encrypted-media"></iframe>
+            <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 45%); z-index:1; pointer-events:none;"></div>
+            <div class="vid-label" style="position:absolute; bottom:.9rem; right:.9rem; left:.9rem; z-index:2;">
+              <span class="vid-tag">לידים</span>
+              <div style="font-size:.85rem;color:rgba(255,255,255,.95);margin-top:0.3rem;font-weight:700;">ניקוי ספות – קמפיין לידים</div>
+            </div>
           </div>
         </div>
 
         <div class="swiper-slide" style="max-width:230px;">
           <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#111818,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.11) 0%,transparent 60%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">מסעדנות</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">מותג מזון – ויזואל קולנועי</div></div>
-          </div>
-        </div>
-        
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a1a,#0d0d0d);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.09) 0%,transparent 60%);"></div><div style="position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">נדל"ן</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">פרויקט יוקרה – רמת השרון</div></div>
-          </div>
-        </div>
-
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0e1a0e,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.13) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">E-Commerce</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">קמפיין השקת מוצר</div></div>
+            <iframe src="https://www.youtube.com/embed/WQtKGjyTAq4?autoplay=1&mute=1&loop=1&playlist=WQtKGjyTAq4&controls=0&playsinline=1&rel=0" 
+                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; pointer-events:none; z-index:0; transform: scale(1.05);" 
+                    allow="autoplay; encrypted-media"></iframe>
+            <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 45%); z-index:1; pointer-events:none;"></div>
+            <div class="vid-label" style="position:absolute; bottom:.9rem; right:.9rem; left:.9rem; z-index:2;">
+              <span class="vid-tag">מסעדנות</span>
+              <div style="font-size:.85rem;color:rgba(255,255,255,.95);margin-top:0.3rem;font-weight:700;">מותג מזון – ויזואל קולנועי</div>
+            </div>
           </div>
         </div>
 
