@@ -1,722 +1,230 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Baduk AI – בדוק שזה AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <style>
-    :root {
-      --lime:   #C7FF00;
-      --bg:     #050505;
-      --card:   #141414;
-      --border: #2A2A2A;
-      --grey:   #CCCCCC;   /* upgraded from #9B9B9B */
-    }
-    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-    html  { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; }
-    body  { font-family:'Assistant',sans-serif; background:var(--bg); color:#fff; overflow-x:hidden; font-size:17px; }
-    a     { text-decoration:none; color:inherit; }
-
-    /* ── Lime ── */
-    .lime        { color:var(--lime); }
-    .lime-shadow { text-shadow:0 0 22px rgba(199,255,0,.5); }
-    .lime-glow   { box-shadow:0 0 22px rgba(199,255,0,.35),0 0 55px rgba(199,255,0,.12); }
-    .lime-glow:hover { box-shadow:0 0 36px rgba(199,255,0,.6),0 0 90px rgba(199,255,0,.25); }
-
-    @keyframes pulse-lime {
-      0%,100% { box-shadow:0 0 18px rgba(199,255,0,.35),0 0 50px rgba(199,255,0,.1); }
-      50%      { box-shadow:0 0 36px rgba(199,255,0,.7),0 0 80px rgba(199,255,0,.28); }
-    }
-    .btn-pulse { animation:pulse-lime 2.6s ease-in-out infinite; }
-
-    /* ── Buttons ── */
-    .btn-lime {
-      display:inline-block; background:var(--lime); color:#050505;
-      font-weight:900; border-radius:1.25rem; border:none; cursor:pointer;
-      transition:transform .25s,box-shadow .25s; font-family:'Assistant',sans-serif;
-    }
-    .btn-lime:hover { transform:scale(1.03); }
-
-    /* ── Glass header ── */
-    .glass {
-      background:rgba(5,5,5,.88);
-      backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
-      border-bottom:1px solid rgba(42,42,42,.9);
-    }
-
-    /* ── Logo ── */
-    .logo-b {
-      width:40px; height:40px; border-radius:11px; background:var(--lime);
-      display:flex; align-items:center; justify-content:center;
-      font-weight:900; color:#050505; font-size:21px; flex-shrink:0;
-    }
-
-    /* ── Layout ── */
-    .wrap    { max-width:880px; margin:0 auto; padding:0 1.25rem; }
-    .divider { height:1px; background:linear-gradient(to left,transparent,var(--border),transparent); }
-
-    /* ── Section tag ── */
-    .sec-tag      { display:flex; align-items:center; gap:.55rem; margin-bottom:1rem; }
-    .sec-tag-bar  { width:3px; height:20px; background:var(--lime); border-radius:2px; flex-shrink:0; }
-    .sec-tag-text { font-size:.78rem; font-weight:800; color:var(--lime); text-transform:uppercase; letter-spacing:1.8px; }
-
-    /* ── Card ── */
-    .card { background:var(--card); border:1px solid var(--border); border-radius:1.25rem; }
-
-    /* ── Marquee CSS animations (GPU, never stutter) ── */
-    @keyframes mq-left  { from{transform:translateX(0)}    to{transform:translateX(-50%)} }
-    @keyframes mq-right { from{transform:translateX(-50%)} to{transform:translateX(0)}    }
-    @keyframes tick-go  { from{transform:translateX(0)}    to{transform:translateX(-50%)} }
-
-    .mq-wrap  { overflow:hidden; }
-    .mq-track {
-      display:flex; width:max-content; will-change:transform;
-      direction:ltr; /* force LTR so flex always goes left→right */
-    }
-    .mq-track.go-left  { animation:mq-left  28s linear infinite; }
-    .mq-track.go-right { animation:mq-right 34s linear infinite; }
-
-    /* ── Ticker items ── */
-    .ticker-wrap  { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--card); }
-    .ticker-track { display:flex; width:max-content; will-change:transform; direction:ltr; animation:tick-go 22s linear infinite; }
-    .ticker-item  {
-      display:flex; align-items:center; gap:.55rem;
-      padding:1rem 2.2rem; white-space:nowrap; border-left:1px solid var(--border);
-    }
-    .ticker-num   { font-size:1.4rem; font-weight:900; color:var(--lime); }
-    .ticker-label { font-size:.9rem; color:var(--grey); }
-
-    /* ── Image marquee squares ── */
-    .img-sq {
-      width:164px; height:164px; border-radius:1rem; flex-shrink:0;
-      border:1px solid var(--border); overflow:hidden; position:relative;
-      margin-left:.7rem;
-    }
-
-    /* ── Swiper ── */
-    .swiper { width:100%; overflow:visible; padding-bottom:2.5rem !important; }
-    .swiper-pagination-bullet { background:var(--border) !important; opacity:1 !important; width:8px !important; height:8px !important; }
-    .swiper-pagination-bullet-active { background:var(--lime) !important; width:22px !important; border-radius:4px !important; }
-
-    /* ── Video card ── */
-    .video-card {
-      border-radius:1.25rem; overflow:hidden; background:var(--card);
-      border:1px solid var(--border); position:relative; aspect-ratio:9/16;
-      cursor:pointer; transition:transform .3s,border-color .3s;
-    }
-    .video-card:hover { transform:scale(1.02); border-color:rgba(199,255,0,.4); }
-    .vid-overlay {
-      position:absolute; inset:0;
-      background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.2) 55%,transparent 100%);
-      display:flex; align-items:center; justify-content:center;
-    }
-    .play-btn {
-      width:62px; height:62px; border-radius:50%;
-      background:rgba(199,255,0,.15); border:2.5px solid var(--lime);
-      display:flex; align-items:center; justify-content:center;
-      transition:transform .25s,background .25s; backdrop-filter:blur(8px);
-    }
-    .video-card:hover .play-btn { transform:scale(1.15); background:rgba(199,255,0,.28); }
-    .play-icon { width:0; height:0; border-style:solid; border-width:11px 0 11px 20px; border-color:transparent transparent transparent var(--lime); margin-right:-3px; }
-    .vid-label { position:absolute; bottom:.9rem; right:.9rem; left:.9rem; }
-    .vid-tag   { display:inline-block; background:var(--lime); color:#050505; font-size:.7rem; font-weight:900; padding:3px 10px; border-radius:99px; margin-bottom:.3rem; }
-
-    /* ── Form ── */
-    .field {
-      width:100%; padding:14px 18px; border-radius:1rem;
-      background:#0c0c0c; border:1.5px solid var(--border);
-      color:#fff; font-size:1.05rem; font-family:'Assistant',sans-serif;
-      transition:border-color .25s,box-shadow .25s; outline:none;
-    }
-    .field::placeholder { color:#555; }
-    .field:focus { border-color:var(--lime); box-shadow:0 0 0 3px rgba(199,255,0,.1); }
-
-    .radio-item {
-      display:flex; align-items:center; gap:.85rem; cursor:pointer;
-      padding:.9rem 1.2rem; border-radius:1rem; border:1.5px solid var(--border);
-      background:#0c0c0c; transition:border-color .2s,background .2s;
-    }
-    .radio-item:has(input:checked) { border-color:var(--lime); background:rgba(199,255,0,.05); }
-    .radio-item input { display:none; }
-    .radio-dot { width:20px; height:20px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:border-color .2s; }
-    .radio-item:has(input:checked) .radio-dot { border-color:var(--lime); }
-    .radio-dot::after { content:''; width:10px; height:10px; border-radius:50%; background:var(--lime); transform:scale(0); transition:transform .2s; }
-    .radio-item:has(input:checked) .radio-dot::after { transform:scale(1); }
-    .radio-label { font-size:1rem; color:#ddd; }
-    .radio-item:has(input:checked) .radio-label { color:#fff; font-weight:700; }
-
-    /* ── Team section ── */
-    .team-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
-    @media(max-width:640px) { .team-grid { grid-template-columns:1fr; } }
-
-    .team-card { border-radius:1.4rem; overflow:hidden; background:var(--card); border:1px solid var(--border); }
-    .team-photo {
-      width:100%; height:220px; overflow:hidden; position:relative;
-      background:linear-gradient(160deg,#111 0%,#050505 100%);
-    }
-    .team-photo img { width:100%; height:100%; object-fit:cover; object-position:top; display:block; }
-    .team-photo-placeholder {
-      position:absolute; inset:0; display:flex; flex-direction:column;
-      align-items:center; justify-content:center; gap:.5rem;
-    }
-    .team-initials {
-      font-size:3.5rem; font-weight:900; color:rgba(199,255,0,.25);
-    }
-    .team-body { padding:1.4rem 1.3rem 1.6rem; }
-    .team-name { font-size:1.2rem; font-weight:900; color:#fff; margin-bottom:.15rem; }
-    .team-role { font-size:.8rem; font-weight:700; color:var(--lime); text-transform:uppercase; letter-spacing:1px; margin-bottom:.9rem; }
-    .team-bio  { font-size:.92rem; color:var(--grey); line-height:1.85; display:flex; flex-direction:column; gap:.4rem; }
-    .team-quote {
-      margin-top:1rem; padding:.9rem 1rem; border-radius:.9rem;
-      background:rgba(199,255,0,.05); border-right:3px solid var(--lime);
-      font-size:.88rem; color:#ddd; font-style:italic; line-height:1.7;
-    }
-
-    /* ── Qualification cards ── */
-    .q-card { display:flex; align-items:flex-start; gap:.9rem; padding:1.4rem 1.5rem; border-radius:1.1rem; border:1px solid var(--border); background:var(--card); }
-    .q-icon { width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; margin-top:1px; }
-
-    /* ── Reveal ── */
-    .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease,transform .7s ease; }
-    .revealed { opacity:1; transform:translateY(0); }
-
-    /* ── Blob ── */
-    .blob { position:absolute; border-radius:50%; filter:blur(50px); pointer-events:none; }
-
-    /* ── Mobile menu ── */
-    #mobile-menu { display:none; }
-    #mobile-menu.open { display:flex; }
-
-    /* ── Noise ── */
-    body::after {
-      content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:.18;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-    }
-  </style>
-</head>
-<body>
-
-<!-- ══════════ HEADER ══════════ -->
-<header class="glass fixed top-0 inset-x-0 z-50">
-  <div style="max-width:1100px;margin:0 auto;padding:0 1.25rem;height:68px;display:flex;align-items:center;justify-content:space-between;">
-    <a href="#" style="display:flex;align-items:center;gap:.75rem;">
-      <div class="logo-b">B</div>
-      <div>
-        <span style="font-weight:900;font-size:1.1rem;">Baduk AI</span>
-        <span style="display:block;font-size:.68rem;color:#444;line-height:1;margin-top:1px;">בדוק שזה AI</span>
-      </div>
-    </a>
-    <nav class="hidden md:flex items-center gap-6" style="font-size:.95rem;color:var(--grey);">
-      <a href="#problem" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--grey)'" style="transition:color .2s;">הבעיה</a>
-      <a href="#team"    onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--grey)'" style="transition:color .2s;">הצוות</a>
-      <a href="#contact" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--grey)'" style="transition:color .2s;">יצירת קשר</a>
-      <a href="#contact" class="btn-lime lime-glow" style="padding:11px 24px;font-size:.92rem;">פגישת פיצוח בחינם ←</a>
-    </nav>
-    <button onclick="toggleMenu()" class="md:hidden" style="background:none;border:none;cursor:pointer;color:#fff;padding:4px;">
-      <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-    </button>
-  </div>
-  <div id="mobile-menu" class="flex-col gap-3 px-5 pb-5" style="background:rgba(5,5,5,.97);border-top:1px solid #1a1a1a;">
-    <a href="#problem" onclick="toggleMenu()" style="color:#ddd;font-size:1.1rem;padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:block;">הבעיה</a>
-    <a href="#team"    onclick="toggleMenu()" style="color:#ddd;font-size:1.1rem;padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:block;">הצוות</a>
-    <a href="#contact" onclick="toggleMenu()" style="color:#ddd;font-size:1.1rem;padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:block;">יצירת קשר</a>
-    <a href="#contact" onclick="toggleMenu()" class="btn-lime lime-glow" style="padding:15px;font-size:1.05rem;margin-top:.4rem;display:block;text-align:center;">פגישת פיצוח בחינם ←</a>
-  </div>
-</header>
-
-
-<!-- ══════════ HERO ══════════ -->
-<section style="padding:112px 1.25rem 2.5rem;position:relative;overflow:hidden;text-align:center;">
-  <div class="blob" style="width:520px;height:520px;background:radial-gradient(circle,rgba(199,255,0,.09) 0%,transparent 70%);top:-130px;left:50%;transform:translateX(-50%);"></div>
-
-  <div style="max-width:860px;margin:0 auto;position:relative;z-index:1;" class="reveal">
-
-    <!-- Targeting line above title -->
-    <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(199,255,0,.07);border:1px solid rgba(199,255,0,.2);border-radius:99px;padding:7px 20px;margin-bottom:1.4rem;font-size:.88rem;color:var(--grey);">
-      <span style="color:var(--lime);font-weight:800;">✦</span>
-      מתאים לבעלי עסקים או סוכנויות שיווק שמשווקות ברשתות ועושות מעל 20,000 ש"ח בחודש
-    </div>
-
-    <!-- Big bold title — reference style -->
-    <h1 style="font-size:clamp(2.6rem,8.5vw,5.8rem);font-weight:900;line-height:1.05;margin-bottom:1.4rem;letter-spacing:-.02em;">
-      יצירת תוכן AI —<br>
-      פחות הפקה,<br>
-      <span class="lime lime-shadow">יותר המרה.</span>
-    </h1>
-
-    <!-- Subtitle — one sentence per line -->
-    <div style="font-size:clamp(1rem,2.3vw,1.18rem);color:var(--grey);max-width:640px;margin:0 auto 2.4rem;display:flex;flex-direction:column;gap:.65rem;text-align:center;line-height:1.5;">
-      <p>הגיע הזמן לדלג מעל הלוגיסטיקה של העולם הישן.</p>
-      <p>אנחנו מייצרים סרטוני פרסום חדים ברמת גימור קולנועית ובשנינות ישראלית —</p>
-      <p>בלי שחקנים ובלי לשרוף עשרות אלפי שקלים על ימי הפקה מורכבים.</p>
-      <p style="color:#eee;font-weight:700;">שילוב מדויק בין אסטרטגיה שיווקית לביצוע ב-AI שמביא תוצאות.</p>
-    </div>
-
-    <a href="#contact" class="btn-lime btn-pulse" style="padding:20px 46px;font-size:clamp(1.05rem,2.5vw,1.25rem);">
-      אני רוצה פגישת פיצוח קריאייטיב בחינם! ←
-    </a>
-
-  </div>
-</section>
-
-
-<!-- ══════════ VIDEO CAROUSEL ══════════ -->
-<section style="padding:2.5rem 0 2rem;">
-  <div class="wrap reveal" style="margin-bottom:1.4rem;">
-    <div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">עבודות אחרונות</span></div>
-    <h2 style="font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;">ראו במו עיניכם</h2>
-  </div>
-  <div style="padding-right:1.25rem;">
-    <div class="swiper swiper-videos" style="overflow:visible;">
-      <div class="swiper-wrapper">
-
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a1a,#0d0d0d);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.09) 0%,transparent 60%);"></div><div style="position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">נדל"ן</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">פרויקט יוקרה – רמת השרון</div></div>
-          </div>
-        </div>
-
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0e1a0e,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.13) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">E-Commerce</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">קמפיין השקת מוצר</div></div>
-          </div>
-        </div>
-
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#161010,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.08) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">High-Ticket</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">פרמיום – קורס דיגיטלי</div></div>
-          </div>
-        </div>
-
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d0e18,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.1) 0%,transparent 55%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">לידים</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">ניקוי ספות – קמפיין לידים</div></div>
-          </div>
-        </div>
-
-        <div class="swiper-slide" style="max-width:230px;">
-          <div class="video-card">
-            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#111818,#0a0a0a);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.11) 0%,transparent 60%);"></div><div style="position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,#fff 28px,#fff 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,#fff 28px,#fff 29px);"></div></div>
-            <div class="vid-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-            <div class="vid-label"><span class="vid-tag">מסעדנות</span><div style="font-size:.8rem;color:rgba(255,255,255,.65);">מותג מזון – ויזואל קולנועי</div></div>
-          </div>
-        </div>
-
-      </div>
-      <div class="swiper-pagination" style="bottom:0;"></div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ══════════ METRICS TICKER ══════════ -->
-<div class="ticker-wrap">
-  <div class="ticker-track">
-    <!-- set 1 -->
-    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
-    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
-    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
-    <!-- set 2 (duplicate — makes loop seamless) -->
-    <div class="ticker-item"><span class="ticker-num">20+</span><span class="ticker-label">לקוחות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">40+</span><span class="ticker-label">סרטונים</span></div>
-    <div class="ticker-item"><span class="ticker-num">1,000+</span><span class="ticker-label">מודעות</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">5+</span><span class="ticker-label">שנים בשוק</span></div>
-    <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-label">ישראלי ועסקי</span></div>
-    <div class="ticker-item" style="background:rgba(199,255,0,.025);"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-
-<!-- ══════════ IMAGE MARQUEE (moved here, above problem) ══════════ -->
-<section style="padding:2.2rem 0;">
-  <div class="wrap reveal" style="margin-bottom:1.2rem;">
-    <div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">גלריית ויזואל</span></div>
-    <h2 style="font-size:clamp(1.3rem,3.5vw,2rem);font-weight:900;">ויזואל שמפרק את המסך</h2>
-  </div>
-
-  <!-- Row 1 → left (CSS infinite, no JS needed) -->
-  <div class="mq-wrap" style="margin-bottom:.7rem;">
-    <div class="mq-track go-left">
-      <!-- set 1 -->
-      <div class="img-sq" style="background:linear-gradient(135deg,#0f1a10,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.14) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">נדל"ן</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#1a0f10,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.1) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">E-Commerce</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#0f100d,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.16) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">High-Ticket</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#0d0d1a,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.11) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">לידים</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#111507,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.13) 0%,transparent 60%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">מסעדנות</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#180f0f,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.09) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">מותג</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#0a150a,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.12) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">ספורט</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#150a1a,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.1) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">אופנה</div></div>
-      <!-- set 2 (duplicate for seamless CSS loop) -->
-      <div class="img-sq" style="background:linear-gradient(135deg,#0f1a10,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.14) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">נדל"ן</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#1a0f10,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.1) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">E-Commerce</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#0f100d,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.16) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">High-Ticket</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#0d0d1a,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.11) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">לידים</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#111507,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.13) 0%,transparent 60%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">מסעדנות</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#180f0f,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.09) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">מותג</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#0a150a,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.12) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">ספורט</div></div>
-      <div class="img-sq" style="background:linear-gradient(135deg,#150a1a,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(199,255,0,.1) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">אופנה</div></div>
-    </div>
-  </div>
-
-  <!-- Row 2 → right/reverse (CSS infinite) -->
-  <div class="mq-wrap">
-    <div class="mq-track go-right">
-      <!-- set 1 -->
-      <div class="img-sq" style="background:linear-gradient(225deg,#0f1a10,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.12) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">סרטי רשת</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#1a0e14,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.15) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">פיננסים</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#0e160f,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.1) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">טכנולוגיה</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#0d0d1e,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.13) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">בריאות</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#171208,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.11) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">חינוך</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#190e0e,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.14) 0%,transparent 60%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">מזון</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#0d1a0d,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.09) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">נדל"ן</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#1a1a0a,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.12) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">אנרגיה</div></div>
-      <!-- set 2 (duplicate for seamless CSS loop) -->
-      <div class="img-sq" style="background:linear-gradient(225deg,#0f1a10,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.12) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">סרטי רשת</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#1a0e14,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.15) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">פיננסים</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#0e160f,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.1) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">טכנולוגיה</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#0d0d1e,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.13) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">בריאות</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#171208,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.11) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">חינוך</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#190e0e,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.14) 0%,transparent 60%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">מזון</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#0d1a0d,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.09) 0%,transparent 70%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">נדל"ן</div></div>
-      <div class="img-sq" style="background:linear-gradient(225deg,#1a1a0a,#050505);"><div style="position:absolute;inset:0;background:linear-gradient(340deg,rgba(199,255,0,.12) 0%,transparent 65%);"></div><div style="position:absolute;bottom:.6rem;right:.7rem;font-size:.7rem;color:rgba(255,255,255,.4);">אנרגיה</div></div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ══════════ THE PROBLEM ══════════ -->
-<section id="problem" style="padding:2.8rem 1.25rem;">
-  <div style="max-width:880px;margin:0 auto;">
-
-    <div class="reveal" style="margin-bottom:1.8rem;">
-      <div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">הבעיה</span></div>
-      <h2 style="font-size:clamp(1.6rem,4.5vw,3rem);font-weight:900;line-height:1.18;margin-bottom:.9rem;">
-        אומרים שתוכן הוא המלך.<br>
-        <span class="lime">הם צודקים</span> — אבל פה בדיוק אתם נתקעים.
-      </h2>
-      <div style="color:var(--grey);font-size:1.02rem;display:flex;flex-direction:column;gap:.4rem;">
-        <p>היום כולם מבינים שהשיווק יקום או ייפול על דבר אחד בלבד: <strong style="color:#eee;">הקריאייטיב שמעלים לאוויר.</strong></p>
-        <p>כשמנסים ליישם בשטח, פוגשים קיר בטון של שתי בעיות מרכזיות:</p>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:.9rem;" class="reveal">
-
-      <div class="card" style="padding:1.8rem 1.6rem;">
-        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">01</div>
-          <h3 style="font-size:1.08rem;font-weight:900;color:#fff;">המחסום הראשון: <span style="color:#ef4444;">איכות</span></h3>
-        </div>
-        <div style="color:var(--grey);font-size:1rem;display:flex;flex-direction:column;gap:.45rem;">
-          <p>כדי לייצר סרטון פרימיום אחד — צריך ימים שלמים.</p>
-          <p>תסריט. צילום. עריכה. תיקונים. עוד תיקונים.</p>
-          <p>הסטנדרט ברשתות עלה לרמה שקשה לעמוד בה לבד.</p>
-          <p>אין לכם את הזמן, הכלים, או הצוות להגיע לרמת הגימור שמותג מוביל צריך.</p>
-          <p style="color:var(--lime);font-weight:700;margin-top:.3rem;">(טוב, אלא אם עובדים איתנו — ואז השמיים הם הגבול 😉)</p>
-        </div>
-      </div>
-
-      <div class="card" style="padding:1.8rem 1.6rem;">
-        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">02</div>
-          <h3 style="font-size:1.08rem;font-weight:900;color:#fff;">המחסום השני: <span style="color:#f97316;">כמות</span></h3>
-        </div>
-        <div style="color:var(--grey);font-size:1rem;display:flex;flex-direction:column;gap:.45rem;">
-          <p>שיווק הוא לא קסם — הוא <strong style="color:#eee;">מדע של ניסוי וטעייה.</strong></p>
-          <p>כדי לפצח מסר אחד, חייבים לתקוף אותו מכמה זוויות.</p>
-          <p>קופי שונה. ויזואל שונה. כמויות גבוהות של וריאציות.</p>
-          <p>בעולם הישן — זה אומר לשרוף <strong style="color:#eee;">עשרות אלפי שקלים</strong> על ימי הפקה חוזרים.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="reveal" style="margin-top:.9rem;border-radius:1.25rem;padding:1.8rem 1.6rem;background:linear-gradient(135deg,rgba(199,255,0,.07),transparent);border:1px solid rgba(199,255,0,.22);">
-      <h3 style="font-size:clamp(1rem,2.8vw,1.4rem);font-weight:900;color:#fff;margin-bottom:.9rem;line-height:1.4;">
-        בשנת 2026, הסיכוי שלכם לתפוס תשומת לב בפיד הוא <span class="lime">כמעט אפסי.</span>
-        <span style="font-size:.82rem;color:var(--grey);font-weight:400;"> (שוב, לא כשאתם איתנו)</span>
-      </h3>
-      <div style="color:var(--grey);font-size:1rem;display:flex;flex-direction:column;gap:.45rem;">
-        <p>נניח שהצלחתם. הגולש עצר את האצבע.</p>
-        <p>עכשיו מגיעה השאלה האמיתית: האם הגישה שלכם תגרום לו לסמוך עליכם?</p>
-        <p>האם המסר עובר בצורה מדויקת — או שהוא ראה עוד סרטון נחמד והמשיך לגלול?</p>
-        <p style="margin-top:.5rem;">בדיוק בגלל זה הקמנו את <span class="lime" style="font-weight:700;">Baduk AI.</span></p>
-        <p>לא לייצר 'סרטונים יפים' שיקבלו לייקים מחברים.</p>
-        <p>אלא לבנות לכם <strong style="color:#fff;">מכונת קריאייטיב שעובדת על דלק מטוסים.</strong></p>
-        <p style="margin-top:.5rem;">אנחנו לוקחים את המסר שלכם, מפצחים אותו אסטרטגית,</p>
-        <p>ומייצרים ממנו ויזואל שנון וממיר — בקצב ובאיכות שהמתחרים שלכם לא יצליחו להבין מאיפה זה נחת עליהם.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ══════════ TEAM SECTION ══════════ -->
-<section id="team" style="padding:2.8rem 1.25rem;">
-  <div style="max-width:880px;margin:0 auto;">
-
-    <div class="reveal" style="margin-bottom:1.8rem;">
-      <div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">הצוות</span></div>
-      <h2 style="font-size:clamp(1.6rem,4.5vw,3rem);font-weight:900;line-height:1.18;">
-        הפנים מאחורי <span class="lime">Baduk AI</span>
-      </h2>
-    </div>
-
-    <div class="team-grid reveal">
-
-      <!-- ── לירן יצחקי ── -->
-      <div class="team-card">
-        <div class="team-photo">
-          <!-- כדי להוסיף תמונה: החלף את ה-div הבא ב: <img src="liran.jpg" alt="לירן יצחקי"> -->
-          <img src="liran.jpg" alt="לירן יצחקי" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="team-photo-placeholder" style="display:none;">
-            <div class="team-initials">לי</div>
-            <div style="font-size:.75rem;color:rgba(199,255,0,.3);font-weight:700;">לירן יצחקי</div>
-          </div>
-        </div>
-        <div class="team-body">
-          <div class="team-name">לירן יצחקי</div>
-          <div class="team-role">בעלים — אמן הויזואל</div>
-          <div class="team-bio">
-            <p>מגיע מעולמות העיצוב הגרפי ועריכת הווידאו.</p>
-            <p>מומחה בהפיכת רעיון מופשט ליצירת מופת קולנועית.</p>
-            <p>מאחוריו ניסיון שטח עשיר מול חברות, ארגונים ובעלי עסקים מובילים בישראל.</p>
-            <p>ייצר במו ידיו למעלה מ-1,000 פיסות תוכן — שסביר להניח שכבר נחשפתם אליהן בפיד שלכם בלי לדעת שהוא חתום עליהן.</p>
-            <p>משנת 2025 הצטרף למהפכת ה-AI והפך לאמן תוכן מבוסס בינה מלאכותית שלא משאיר קצוות פתוחים.</p>
-          </div>
-          <div class="team-quote">
-            "פעם לייצר תוכן הרגיש כמו לנסוע על מרצדס, היום אני טס בחללית.<br>עוד לא נתקלתי בצורך ויזואלי שלא הצלחתי להביא לידי יישום."
-          </div>
-        </div>
-      </div>
-
-      <!-- ── עידו צפניה ── -->
-      <div class="team-card">
-        <div class="team-photo">
-          <img src="ido.jpg" alt="עידו צפניה" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="team-photo-placeholder" style="display:none;">
-            <div class="team-initials">עי</div>
-            <div style="font-size:.75rem;color:rgba(199,255,0,.3);font-weight:700;">עידו צפניה</div>
-          </div>
-        </div>
-        <div class="team-body">
-          <div class="team-name">עידו צפניה</div>
-          <div class="team-role">בעלים — המוח האסטרטגי</div>
-          <div class="team-bio">
-            <p>מגיע מעולמות השיווק והמכירות.</p>
-            <p>למעלה מ-5 שנות ניסיון מעשי בבניית משפכי שיווק מורכבים עבור בעלי עסקים ויוצרי תוכן בארץ.</p>
-            <p>מאחוריו תכנון והובלה של מערכים שיווקיים שלמים — מדפי נחיתה ממירים ועד קמפיינים ממומנים שהניבו החזרי השקעה גבוהים במיוחד.</p>
-            <p>המוח האסטרטגי שמפצח את המסרים ומבטיח שהוויזואל המשוגע יתורגם ישירות לשורה התחתונה.</p>
-          </div>
-          <div class="team-quote">
-            "המכירה האמיתית מתחילה בשיווק.<br>שיווק טוב מכין את הלקוח לקנייה עוד לפני שנוצרה איתו האינטראקציה הראשונה."
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ══════════ QUALIFICATION ══════════ -->
-<section id="qualify" style="padding:2.8rem 1.25rem;">
-  <div style="max-width:880px;margin:0 auto;">
-
-    <div class="reveal" style="margin-bottom:1.8rem;">
-      <div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">מי אנחנו מחפשים</span></div>
-      <h2 style="font-size:clamp(1.6rem,4.5vw,3rem);font-weight:900;line-height:1.18;">
-        אנחנו לא עובדים עם כל אחד.<br>
-        <span class="lime">אנחנו בוחרים את הלקוחות שלנו.</span>
-      </h2>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:.85rem;" class="reveal">
-
-      <div class="q-card">
-        <div class="q-icon" style="background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);">🎯</div>
-        <div>
-          <div style="font-weight:800;color:#fff;font-size:1.02rem;margin-bottom:.4rem;">כל פרויקט מקבל 100% מהמשאבים שלנו</div>
-          <div style="color:var(--grey);font-size:.98rem;display:flex;flex-direction:column;gap:.3rem;">
-            <p>אנחנו לא פס ייצור המוני.</p>
-            <p>כל סרטון, כל מסר, כל קריאייטיב — עובר ישירות דרך הידיים שלנו.</p>
-            <p>בגלל זה אנחנו מגבילים קשיח את כמות הלקוחות שאנחנו מקבלים בחודש.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="q-card">
-        <div class="q-icon" style="background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);">⚡</div>
-        <div>
-          <div style="font-weight:800;color:#fff;font-size:1.02rem;margin-bottom:.4rem;">לא פרילאנסרים. לא מתמחים. נקודה.</div>
-          <div style="color:var(--grey);font-size:.98rem;display:flex;flex-direction:column;gap:.3rem;">
-            <p>אצלנו לא תועברו לסוכנות-משנה שתעשה עליכם סטאז'.</p>
-            <p>צוות מצומצם ומקצוען. 5+ שנות ניסיון בשיווק וקריאייטיב.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="q-card">
-        <div class="q-icon" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);">🚫</div>
-        <div>
-          <div style="font-weight:800;color:#fff;font-size:1.02rem;margin-bottom:.4rem;">מחפשים "סרטוני AI זולים"? אנחנו לא הכתובת.</div>
-          <div style="color:var(--grey);font-size:.98rem;display:flex;flex-direction:column;gap:.3rem;">
-            <p>לא עובדים עם כל מי שמגיע.</p>
-            <p>עובדים עם אלה שמבינים שקריאייטיב הוא השקעה — לא הוצאה.</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="reveal" style="margin-top:.9rem;border-radius:1.25rem;padding:1.8rem 1.6rem;border:1px solid rgba(199,255,0,.25);background:linear-gradient(135deg,rgba(199,255,0,.06),transparent);">
-      <div style="font-size:.75rem;font-weight:800;color:var(--lime);letter-spacing:1.5px;margin-bottom:.9rem;">✦ מי כן מתאים לנו?</div>
-      <div style="display:flex;flex-direction:column;gap:.7rem;">
-        <div style="display:flex;align-items:flex-start;gap:.65rem;">
-          <span style="color:var(--lime);font-size:1.1rem;margin-top:1px;flex-shrink:0;">✓</span>
-          <span style="color:#eee;font-size:1rem;">יש לכם <strong>מוצר או שירות מעולה</strong> שאתם מאמינים בו</span>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:.65rem;">
-          <span style="color:var(--lime);font-size:1.1rem;margin-top:1px;flex-shrink:0;">✓</span>
-          <span style="color:#eee;font-size:1rem;"><strong>תקציב פרסום קיים</strong> — ממומן שרץ או שאתם מתכוונים להפעיל</span>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:.65rem;">
-          <span style="color:var(--lime);font-size:1.1rem;margin-top:1px;flex-shrink:0;">✓</span>
-          <span style="color:#eee;font-size:1rem;">אתם מבינים שתוכן דיגיטלי <strong>משפיע ישירות</strong> על כמה כסף ייכנס בסוף החודש</span>
-        </div>
-      </div>
-      <div style="margin-top:1.2rem;padding-top:1.1rem;border-top:1px solid var(--border);text-align:center;">
-        <a href="#contact" style="color:#fff;font-size:1.05rem;font-weight:800;">בואו נדבר ←</a>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ══════════ CONTACT FORM ══════════ -->
-<section id="contact" style="padding:2.8rem 1.25rem 3rem;">
-  <div style="max-width:640px;margin:0 auto;">
-    <div style="border-radius:1.5rem;padding:2.4rem 1.9rem;background:var(--card);border:1px solid var(--border);position:relative;overflow:hidden;">
-      <div class="blob" style="width:280px;height:280px;background:radial-gradient(circle,rgba(199,255,0,.08) 0%,transparent 70%);top:-90px;left:-70px;"></div>
-      <div style="position:relative;z-index:1;">
-        <h3 style="font-size:clamp(1.4rem,3.5vw,2rem);font-weight:900;margin-bottom:.4rem;color:#fff;line-height:1.2;">
-          לקביעת פגישת פיצוח<br><span class="lime">קריאייטיב בחינם!</span>
-        </h3>
-        <p style="color:var(--grey);font-size:.98rem;margin-bottom:1.8rem;">מלאו את הפרטים ואנחנו נחזור אליכם תוך 24 שעות.</p>
-
-        <form id="contactForm" onsubmit="handleSubmit(event)">
-          <div style="display:flex;flex-direction:column;gap:1rem;">
-            <div>
-              <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">שם מלא</label>
-              <input type="text" placeholder="ישראל ישראלי" class="field" required>
-            </div>
-            <div>
-              <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">טלפון ישיר</label>
-              <input type="tel" placeholder="05X-XXXXXXX" class="field" dir="ltr" required>
-            </div>
-            <div>
-              <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;">תחום העסק / קישור לאתר</label>
-              <input type="text" placeholder='נדל"ן / www.mybusiness.co.il' class="field" required>
-            </div>
-            <div>
-              <label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.7rem;">תקציב פרסום חודשי בממומן</label>
-              <div style="display:flex;flex-direction:column;gap:.6rem;">
-                <label class="radio-item"><input type="radio" name="budget" value="under10k" required><div class="radio-dot"></div><span class="radio-label">פחות מ-10,000 ש"ח חודשי</span></label>
-                <label class="radio-item"><input type="radio" name="budget" value="10k-30k"><div class="radio-dot"></div><span class="radio-label">10,000 ש"ח – 30,000 ש"ח חודשי</span></label>
-                <label class="radio-item"><input type="radio" name="budget" value="over30k"><div class="radio-dot"></div><span class="radio-label">מעל 30,000 ש"ח חודשי</span></label>
-              </div>
-            </div>
-            <button type="submit" class="btn-lime lime-glow" style="padding:18px;font-size:1.1rem;border-radius:1.1rem;width:100%;margin-top:.2rem;">
-              אני רוצה פגישת פיצוח בחינם ←
-            </button>
-          </div>
-        </form>
-
-        <div id="form-success" style="display:none;text-align:center;padding:2rem 0;">
-          <div style="font-size:3.5rem;margin-bottom:.8rem;">✅</div>
-          <h3 class="lime lime-shadow" style="font-size:1.9rem;font-weight:900;margin-bottom:.5rem;">קיבלנו!</h3>
-          <p style="color:var(--grey);line-height:1.7;font-size:1.05rem;">ניצור איתכם קשר תוך 24 שעות.<br>אם אתם עוברים את הסלקציה — נקבע פגישה 😎</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-
-<!-- ══════════ FOOTER ══════════ -->
-<footer style="padding:2rem 1.25rem;text-align:center;">
-  <div style="display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:.7rem;">
-    <div class="logo-b">B</div>
-    <span style="font-weight:900;font-size:1.1rem;">Baduk AI</span>
-    <span style="color:#333;margin:0 .3rem;">|</span>
-    <span style="color:#555;font-size:.9rem;">בדוק שזה AI</span>
-  </div>
-  <p style="color:#2a2a2a;font-size:.82rem;">© 2026 Baduk AI. כל הזכויות שמורות.</p>
-</footer>
-
-
-<script>
-  /* ── Mobile menu ── */
-  function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
-
-  /* ── Form ── */
-  function handleSubmit(e) {
-    e.preventDefault();
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('form-success').style.display = 'block';
-  }
-
-  /* ── Scroll reveal ── */
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); } });
-  }, { threshold: 0.07 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-  setTimeout(() => { document.querySelectorAll('section:first-of-type .reveal').forEach(el => el.classList.add('revealed')); }, 80);
-
-  /* ── Field focus ── */
-  document.querySelectorAll('.field').forEach(el => {
-    el.addEventListener('focus', () => { el.style.borderColor='#C7FF00'; el.style.boxShadow='0 0 0 3px rgba(199,255,0,.1)'; });
-    el.addEventListener('blur',  () => { el.style.borderColor='#2A2A2A'; el.style.boxShadow='none'; });
-  });
-
-  /* ── Swiper ── */
-  new Swiper('.swiper-videos', {
-    slidesPerView:'auto', spaceBetween:14, grabCursor:true, freeMode:true,
-    pagination:{ el:'.swiper-videos .swiper-pagination', clickable:true }
-  });
-
-</script>
-
-</body>
-</html>
+‏B
+‏Baduk AI
+בדוק שזה AI
+הבעיה הצוות יצירת קשר פגישת פיצוח בחינם ←
+
+
+✦
+מתאים לבעלי עסקים או סוכנויות שיווק שמשווקות ברשתות ועושות מעל 20,000 ש"ח בחודש
+יצירת תוכן AI — פחות הפקה, יותר המרה.
+הגיע הזמן לדלג מעל הלוגיסטיקה של העולם הישן.
+אנחנו מייצרים סרטוני פרסום חדים ברמת גימור קולנועית ובשנינות ישראלית —
+בלי שחקנים ובלי לשרוף עשרות אלפי שקלים על ימי הפקה מורכבים.
+שילוב מדויק בין אסטרטגיה שיווקית לביצוע ב-AI שמביא תוצאות.
+אני רוצה פגישת פיצוח קריאייטיב בחינם! ←
+
+עבודות אחרונות
+ראו במו עיניכם
+
+
+
+נדל"ן
+פרויקט יוקרה – רמת השרון
+
+
+
+‏E-Commerce
+קמפיין השקת מוצר
+
+
+
+‏High-Ticket
+פרמיום – קורס דיגיטלי
+
+
+
+לידים
+ניקוי ספות – קמפיין לידים
+
+
+
+מסעדנות
+מותג מזון – ויזואל קולנועי
+
+
+20+
+‎לקוחות
+40+
+‎סרטונים
+1,000+
+‎מודעות
+5+
+‎שנים בשוק
+100%
+‎ישראלי ועסקי
+∞
+‎קריאייטיבים
+20+
+‎לקוחות
+40+
+‎סרטונים
+1,000+
+‎מודעות
+5+
+‎שנים בשוק
+100%
+‎ישראלי ועסקי
+∞
+‎קריאייטיבים
+
+
+גלריית ויזואל
+ויזואל שמפרק את המסך
+
+‎נדל"ן
+
+E-Commerce
+
+High-Ticket
+
+‎לידים
+
+‎מסעדנות
+
+‎מותג
+
+‎ספורט
+
+‎אופנה
+
+‎נדל"ן
+
+E-Commerce
+
+High-Ticket
+
+‎לידים
+
+‎מסעדנות
+
+‎מותג
+
+‎ספורט
+
+‎אופנה
+
+‎סרטי רשת
+
+‎פיננסים
+
+‎טכנולוגיה
+
+‎בריאות
+
+‎חינוך
+
+‎מזון
+
+‎נדל"ן
+
+‎אנרגיה
+
+‎סרטי רשת
+
+‎פיננסים
+
+‎טכנולוגיה
+
+‎בריאות
+
+‎חינוך
+
+‎מזון
+
+‎נדל"ן
+
+‎אנרגיה
+
+
+הבעיה
+אומרים שתוכן הוא המלך. הם צודקים — אבל פה בדיוק אתם נתקעים.
+היום כולם מבינים שהשיווק יקום או ייפול על דבר אחד בלבד: הקריאייטיב שמעלים לאוויר.
+כשמנסים ליישם בשטח, פוגשים קיר בטון של שתי בעיות מרכזיות:
+01
+המחסום הראשון: איכות
+כדי לייצר סרטון פרימיום אחד — צריך ימים שלמים.
+תסריט. צילום. עריכה. תיקונים. עוד תיקונים.
+הסטנדרט ברשתות עלה לרמה שקשה לעמוד בה לבד.
+אין לכם את הזמן, הכלים, או הצוות להגיע לרמת הגימור שמותג מוביל צריך.
+(טוב, אלא אם עובדים איתנו — ואז השמיים הם הגבול 😉)
+02
+המחסום השני: כמות
+שיווק הוא לא קסם — הוא מדע של ניסוי וטעייה.
+כדי לפצח מסר אחד, חייבים לתקוף אותו מכמה זוויות.
+קופי שונה. ויזואל שונה. כמויות גבוהות של וריאציות.
+בעולם הישן — זה אומר לשרוף עשרות אלפי שקלים על ימי הפקה חוזרים.
+בשנת 2026, הסיכוי שלכם לתפוס תשומת לב בפיד הוא כמעט אפסי. (שוב, לא כשאתם איתנו)
+נניח שהצלחתם. הגולש עצר את האצבע.
+עכשיו מגיעה השאלה האמיתית: האם הגישה שלכם תגרום לו לסמוך עליכם?
+האם המסר עובר בצורה מדויקת — או שהוא ראה עוד סרטון נחמד והמשיך לגלול?
+בדיוק בגלל זה הקמנו את Baduk AI.
+לא לייצר 'סרטונים יפים' שיקבלו לייקים מחברים.
+אלא לבנות לכם מכונת קריאייטיב שעובדת על דלק מטוסים.
+אנחנו לוקחים את המסר שלכם, מפצחים אותו אסטרטגית,
+ומייצרים ממנו ויזואל שנון וממיר — בקצב ובאיכות שהמתחרים שלכם לא יצליחו להבין מאיפה זה נחת עליהם.
+
+
+הצוות
+הפנים מאחורי Baduk AI
+
+לירן יצחקי
+בעלים — אמן הויזואל
+מגיע מעולמות העיצוב הגרפי ועריכת הווידאו.
+מומחה בהפיכת רעיון מופשט ליצירת מופת קולנועית.
+מאחוריו ניסיון שטח עשיר מול חברות, ארגונים ובעלי עסקים מובילים בישראל.
+ייצר במו ידיו למעלה מ-1,000 פיסות תוכן — שסביר להניח שכבר נחשפתם אליהן בפיד שלכם בלי לדעת שהוא חתום עליהן.
+משנת 2025 הצטרף למהפכת ה-AI והפך לאמן תוכן מבוסס בינה מלאכותית שלא משאיר קצוות פתוחים.
+"פעם לייצר תוכן הרגיש כמו לנסוע על מרצדס, היום אני טס בחללית.
+עוד לא נתקלתי בצורך ויזואלי שלא הצלחתי להביא לידי יישום."
+
+עידו צפניה
+בעלים — המוח האסטרטגי
+מגיע מעולמות השיווק והמכירות.
+למעלה מ-5 שנות ניסיון מעשי בבניית משפכי שיווק מורכבים עבור בעלי עסקים ויוצרי תוכן בארץ.
+מאחוריו תכנון והובלה של מערכים שיווקיים שלמים — מדפי נחיתה ממירים ועד קמפיינים ממומנים שהניבו החזרי השקעה גבוהים במיוחד.
+המוח האסטרטגי שמפצח את המסרים ומבטיח שהוויזואל המשוגע יתורגם ישירות לשורה התחתונה.
+"המכירה האמיתית מתחילה בשיווק.
+שיווק טוב מכין את הלקוח לקנייה עוד לפני שנוצרה איתו האינטראקציה הראשונה."
+
+
+מי אנחנו מחפשים
+אנחנו לא עובדים עם כל אחד. אנחנו בוחרים את הלקוחות שלנו.
+🎯
+כל פרויקט מקבל 100% מהמשאבים שלנו
+אנחנו לא פס ייצור המוני.
+כל סרטון, כל מסר, כל קריאייטיב — עובר ישירות דרך הידיים שלנו.
+בגלל זה אנחנו מגבילים קשיח את כמות הלקוחות שאנחנו מקבלים בחודש.
+⚡
+לא פרילאנסרים. לא מתמחים. נקודה.
+אצלנו לא תועברו לסוכנות-משנה שתעשה עליכם סטאז'.
+צוות מצומצם ומקצוען. 5+ שנות ניסיון בשיווק וקריאייטיב.
+🚫
+מחפשים "סרטוני AI זולים"? אנחנו לא הכתובת.
+לא עובדים עם כל מי שמגיע.
+עובדים עם אלה שמבינים שקריאייטיב הוא השקעה — לא הוצאה.
+✦ מי כן מתאים לנו?
+✓
+יש לכם מוצר או שירות מעולה שאתם מאמינים בו
+✓
+תקציב פרסום קיים — ממומן שרץ או שאתם מתכוונים להפעיל
+✓
+אתם מבינים שתוכן דיגיטלי משפיע ישירות על כמה כסף ייכנס בסוף החודש
+בואו נדבר ←
+
+
+לקביעת פגישת פיצוח קריאייטיב בחינם!
+מלאו את הפרטים ואנחנו נחזור אליכם תוך 24 שעות.
+שם מלא
+טלפון ישיר
+תחום העסק / קישור לאתר
+תקציב פרסום חודשי בממומן
+פחות מ-10,000 ש"ח חודשי
+10,000 ש"ח – 30,000 ש"ח חודשי
+מעל 30,000 ש"ח חודשי
+אני רוצה פגישת פיצוח בחינם ←
+
+‏B
+‏Baduk AI
+|
+בדוק שזה AI
+‏© 2026 Baduk AI. כל הזכויות שמורות.
