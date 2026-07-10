@@ -1,77 +1,429 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Baduk AI – בדוק שזה AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <style>
-    :root{--lime:#C7FF00;--bg:#050505;--card:#141414;--border:#2A2A2A;--grey:#CCCCCC}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    body{font-family:'Assistant',sans-serif;background:radial-gradient(circle at 20% 0,rgba(199,255,0,.08),transparent 35rem),var(--bg);color:#fff;overflow-x:hidden;font-size:17px;width:100%;max-width:100%}
-    body::before{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E")}
-    a{text-decoration:none;color:inherit}img{max-width:100%;height:auto}strong{color:#fff;font-weight:800}section,footer,.divider,.ticker-container{position:relative;z-index:3}
-    .lime{color:var(--lime)}.lime-shadow{text-shadow:0 0 22px rgba(199,255,0,.5),0 0 58px rgba(199,255,0,.2)}
-    .lime-glow{box-shadow:0 0 22px rgba(199,255,0,.35),0 0 55px rgba(199,255,0,.12)}.lime-glow:hover{box-shadow:0 0 36px rgba(199,255,0,.6),0 0 90px rgba(199,255,0,.25)}
-    #scroll-progress{position:fixed;top:0;inset-inline-start:0;width:0;height:3px;background:var(--lime);box-shadow:0 0 18px var(--lime);z-index:100}
-    .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;border-radius:50%;pointer-events:none;z-index:120;transform:translate(-50%,-50%);mix-blend-mode:difference}.cursor-dot{width:16px;height:16px;background:var(--lime)}.cursor-ring{width:40px;height:40px;border:1px solid var(--lime)}
-    .ambient-blob{position:fixed;right:-120px;bottom:-130px;width:360px;height:360px;z-index:0;pointer-events:none;filter:blur(30px);opacity:.5;background:radial-gradient(circle,rgba(199,255,0,.22),transparent 70%);animation:morph 10s ease-in-out infinite;transform:translate3d(var(--blob-x,0),var(--blob-y,0),0)}
-    @keyframes morph{0%,100%{border-radius:44% 56% 62% 38%/43% 35% 65% 57%}50%{border-radius:63% 37% 36% 64%/56% 60% 40% 44%}}
-    .btn-lime{position:relative;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;background:var(--lime);color:#050505;font-weight:900;border-radius:1.25rem;border:none;cursor:pointer;transition:transform .25s,box-shadow .25s;font-family:'Assistant',sans-serif}.btn-lime:hover{transform:translateY(-2px) scale(1.025)}
-    @keyframes pulse-lime{0%,100%{box-shadow:0 0 18px rgba(199,255,0,.35),0 0 50px rgba(199,255,0,.1)}50%{box-shadow:0 0 36px rgba(199,255,0,.7),0 0 80px rgba(199,255,0,.28)}}.btn-pulse{animation:pulse-lime 2.6s ease-in-out infinite}
-    .glass{background:rgba(5,5,5,.64);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(42,42,42,.85);transition:.3s}.glass.scrolled{border-bottom-color:rgba(199,255,0,.4);box-shadow:0 10px 38px rgba(0,0,0,.42),0 1px 0 rgba(199,255,0,.28)}
-    .logo-b{width:40px;height:40px;border-radius:11px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-weight:900;color:#050505;font-size:21px;flex-shrink:0;box-shadow:0 0 30px rgba(199,255,0,.22);transition:transform .28s}.logo-b:hover,a:hover .logo-b{transform:perspective(520px) rotateY(15deg) rotateX(-5deg)}
-    .nav-link{position:relative;transition:color .22s;padding:.3rem 0}.nav-link::after{content:"";position:absolute;right:0;bottom:0;width:100%;height:2px;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:.32s;box-shadow:0 0 12px var(--lime)}.nav-link:hover{color:#fff}.nav-link:hover::after{transform:scaleX(1)}
-    .wrap{max-width:880px;margin:0 auto;padding:0 1.25rem}.divider{height:1px;background:linear-gradient(to left,transparent,var(--border),rgba(199,255,0,.32),var(--border),transparent)}
-    .reveal{opacity:0;transform:translateY(40px);transition:opacity .6s ease,transform .6s ease}.revealed{opacity:1;transform:translateY(0)}
-    .sec-tag{display:flex;align-items:center;gap:.6rem;margin-bottom:1.2rem}.sec-tag-bar{width:4px;height:24px;background:var(--lime);border-radius:2px;box-shadow:0 0 18px var(--lime)}.sec-tag-text{font-size:1.15rem;font-weight:900;color:var(--lime);text-transform:uppercase;letter-spacing:1px}
-    .hero{position:relative;min-height:100svh;padding:112px 1.25rem 4.6rem;overflow:hidden;text-align:center;display:flex;align-items:center}.hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 70% at 50% 48%,rgba(5,5,5,.62) 0%,rgba(5,5,5,.15) 100%)}.hero::after{content:"";position:absolute;inset:auto 0 0;height:30%;z-index:1;background:linear-gradient(to top,var(--bg),transparent)}
-    #hero-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:2}.hero-kicker{display:inline-flex;align-items:center;gap:.5rem;background:rgba(5,5,5,.88);border:1px solid rgba(199,255,0,.55);border-radius:99px;padding:7px 20px;margin-bottom:1.4rem;font-size:.88rem;color:var(--grey);box-shadow:0 0 28px rgba(199,255,0,.12)}
-    .hero-title{font-size:clamp(2rem,7vw,5rem);font-weight:900;line-height:1.1;margin-bottom:1.4rem;letter-spacing:0;text-shadow:0 2px 28px rgba(0,0,0,.85)}.word-reveal{display:inline-block;opacity:0;transform:translateY(36px) rotateX(18deg);animation:wordUp .78s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:var(--d)}@keyframes wordUp{to{opacity:1;transform:translateY(0) rotateX(0)}}.hero-copy{font-size:clamp(.95rem,2.5vw,1.18rem);color:#e2e2e2;text-shadow:0 1px 10px rgba(0,0,0,.95);max-width:640px;margin:0 auto 2.4rem;display:flex;flex-direction:column;gap:.65rem;line-height:1.5}
-    .card{position:relative;background:linear-gradient(145deg,rgba(20,20,20,.96),rgba(8,8,8,.96));border:1px solid var(--border);border-radius:1.25rem;transition:.3s;overflow:hidden}.card:hover{transform:translateY(-4px);border-color:rgba(199,255,0,.25);box-shadow:0 18px 60px rgba(0,0,0,.35),0 0 28px rgba(199,255,0,.08)}
-    .swiper{width:100%;overflow:visible;padding-bottom:2.5rem!important}.swiper-pagination-bullet{background:var(--border)!important;opacity:1!important}.swiper-pagination-bullet-active{background:var(--lime)!important;width:22px!important;border-radius:4px!important}
-    .video-card{border-radius:1.25rem;overflow:hidden;background:var(--card);border:1px solid var(--border);position:relative;aspect-ratio:9/16;cursor:pointer;transition:transform .18s,border-color .3s,box-shadow .3s;transform-style:preserve-3d}.video-card:hover{border-color:rgba(199,255,0,.62);box-shadow:0 0 42px rgba(199,255,0,.24)}.play-badge{position:absolute;top:14px;right:14px;z-index:4;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--lime);color:#050505;opacity:0;transform:scale(.65);transition:.25s}.video-card:hover .play-badge{opacity:1;transform:scale(1)}.play-overlay{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;background:rgba(5,5,5,.45);cursor:pointer;transition:opacity .3s;border-radius:inherit}.play-btn-big{width:68px;height:68px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#050505;box-shadow:0 0 28px rgba(199,255,0,.5);transition:transform .2s}.play-overlay:hover .play-btn-big{transform:scale(1.1)}
-    .marquee-wrapper{display:flex;overflow:hidden;width:100%;direction:ltr}.marquee-track{display:flex;flex-shrink:0;min-width:100%;animation:scroll-left 24s linear infinite}@keyframes scroll-left{to{transform:translateX(-100%)}}.ticker-container{border-block:1px solid var(--border);background:linear-gradient(110deg,#111,#080808,rgba(199,255,0,.055),#101010);background-size:160% 160%;animation:tickerMesh 12s ease-in-out infinite alternate;margin-bottom:1rem}@keyframes tickerMesh{to{background-position:100% 50%}}.ticker-item{display:flex;align-items:center;gap:.55rem;padding:1rem 2.2rem;white-space:nowrap;border-left:1px solid rgba(42,42,42,.72)}.ticker-item:nth-child(even){background:rgba(199,255,0,.025)}.ticker-num{font-size:1.4rem;font-weight:900;color:var(--lime);direction:ltr;text-shadow:0 0 20px rgba(199,255,0,.35)}.ticker-label{font-size:.9rem;color:var(--grey)}
-    .team-grid,.pain-bento{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.budget-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem}
-    .pain-card{padding:1.8rem 1.6rem}.ghost-num{position:absolute;left:1rem;bottom:-1.25rem;font-size:8rem;font-weight:900;color:rgba(199,255,0,.045);pointer-events:none}.pain-box-title{font-size:1.2rem;font-weight:900;color:#fff;line-height:1.3}.pain-desc{font-size:.98rem;color:var(--grey);line-height:1.6;display:flex;flex-direction:column;gap:.6rem;position:relative;z-index:1}.highlight-box{position:relative;margin-top:.9rem;border-radius:1.25rem;padding:1.8rem 1.6rem;background:linear-gradient(135deg,rgba(199,255,0,.07),rgba(20,20,20,.55));overflow:hidden}.highlight-box::before{content:"";position:absolute;inset:0;padding:1px;border-radius:inherit;background:linear-gradient(90deg,rgba(199,255,0,.12),var(--lime),rgba(255,255,255,.3),rgba(199,255,0,.12));background-size:240% 100%;animation:borderFlow 5s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}@keyframes borderFlow{to{background-position:240% 0}}
-    .team-card{min-height:620px;perspective:1200px;border-radius:1.4rem;position:relative}.team-card-inner{position:relative;width:100%;height:100%;min-height:620px;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}.team-card:hover .team-card-inner,.team-card.is-flipped .team-card-inner{transform:rotateY(180deg)}.team-face{position:absolute;inset:0;border-radius:1.4rem;overflow:hidden;background:linear-gradient(145deg,#151515,#090909);border:1px solid var(--border);backface-visibility:hidden;box-shadow:0 24px 60px rgba(0,0,0,.32)}.team-back{display:flex;align-items:center;justify-content:center;padding:2rem;transform:rotateY(180deg);border-color:rgba(199,255,0,.34);background:radial-gradient(circle at 35% 20%,rgba(199,255,0,.12),transparent 34%),#070707}.team-back-quote{font-size:clamp(1.35rem,2.8vw,1.9rem);line-height:1.55;font-weight:800;text-align:center}.team-photo{width:100%;height:220px;overflow:hidden;position:relative;background:#0c0c0c}.team-photo img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;transition:.5s}.team-card:hover .team-photo img{transform:scale(1.035);filter:contrast(1.12) saturate(1.08)}.team-photo-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem}.team-initials{width:72px;height:72px;border-radius:50%;background:rgba(199,255,0,.08);border:2px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:var(--lime)}.team-body{padding:1.4rem 1.3rem 1.6rem}.team-name{font-size:1.2rem;font-weight:900}.team-role{font-size:.8rem;font-weight:700;color:var(--lime);text-transform:uppercase;letter-spacing:1px;margin-bottom:.9rem}.team-bio{font-size:.95rem;color:var(--grey);line-height:1.7;display:flex;flex-direction:column;gap:.6rem}.team-quote{margin-top:1.2rem;padding:.9rem 1rem;border-radius:.9rem;background:rgba(199,255,0,.05);border-right:3px solid var(--lime);font-size:.9rem;color:#ddd;font-style:italic;line-height:1.7}
-    .qualify-stack{position:relative;display:flex;flex-direction:column;gap:.85rem;padding-right:1.6rem}.qualify-stack::before{content:"";position:absolute;top:.4rem;bottom:.4rem;right:.28rem;width:2px;background:rgba(199,255,0,.12)}.qualify-progress{position:absolute;top:.4rem;right:.28rem;width:2px;height:var(--qualify-progress,0%);max-height:calc(100% - .8rem);background:var(--lime);box-shadow:0 0 16px var(--lime)}.q-card{background:linear-gradient(135deg,var(--card),rgba(199,255,0,.03));border:1px solid var(--border);border-radius:1.25rem;padding:1.8rem 1.6rem;opacity:0;transform:perspective(900px) rotateX(25deg) translateY(34px);transition:.6s}.q-card.revealed{opacity:1;transform:perspective(900px) rotateX(0) translateY(0)}.q-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}.q-icon{width:38px;height:38px;border-radius:9px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;animation:iconFloat 3.4s ease-in-out infinite}@keyframes iconFloat{50%{transform:translateY(-7px)}}.q-title{font-size:1.15rem;font-weight:900}.q-desc{font-size:.98rem;color:var(--grey);line-height:1.65;display:flex;flex-direction:column;gap:.6rem}
-    .contact-section{padding:2.8rem 1.25rem 3rem;overflow:hidden}.contact-section::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(199,255,0,.2) 1px,transparent 1px);background-size:24px 24px;opacity:.13;animation:gridBreath 7s ease-in-out infinite}@keyframes gridBreath{50%{background-size:29px 29px;opacity:.18}}.form-card{position:relative;border-radius:1.5rem;padding:2.4rem 1.9rem;background:#0d0d0d;border:1px solid var(--border);overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.44)}.field-group{position:relative}.field-label{display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.45rem;transition:.22s}.field-group:focus-within .field-label{color:var(--lime);transform:translateY(-2px)}.field{width:100%;padding:14px 18px;border-radius:1rem;background:#0c0c0c;border:1.5px solid var(--border);color:#fff;font-size:1.05rem;font-family:'Assistant',sans-serif;transition:.25s;outline:none}.field::placeholder{color:#555}.field:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(199,255,0,.1),0 0 22px rgba(199,255,0,.08)}.radio-item{display:flex;align-items:center;gap:.85rem;cursor:pointer;padding:.9rem 1.2rem;border-radius:1rem;border:1.5px solid var(--border);background:#0c0c0c;transition:.2s}.radio-item:has(input:checked){border-color:var(--lime);background:rgba(199,255,0,.05)}.radio-item input{display:none}.radio-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center}.radio-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--lime);transform:scale(0);transition:.2s}.radio-item:has(input:checked) .radio-dot{border-color:var(--lime)}.radio-item:has(input:checked) .radio-dot::after{transform:scale(1)}.radio-label{font-size:1rem;color:#ddd}.radio-item:has(input:checked) .radio-label{color:#fff;font-weight:700}
-    .privacy-overlay{position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem}.privacy-box{max-width:680px;width:90%;max-height:82vh;overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:1.5rem;padding:2.5rem 2rem;position:relative}.privacy-close{position:absolute;top:1rem;left:1rem;color:var(--lime);font-size:2rem;background:none;border:none;cursor:pointer;line-height:1}.privacy-title{font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:1.5rem;text-align:right;display:block}.privacy-box h3{color:var(--lime);font-size:1rem;font-weight:900;margin:1.4rem 0 .4rem;text-align:right}.privacy-box p{color:var(--grey);font-size:.93rem;line-height:1.8;text-align:right}.accessibility-btn{position:fixed;bottom:24px;left:24px;z-index:9998;width:54px;height:54px;border-radius:50%;background:var(--lime);color:#050505;font-size:1.5rem;border:none;box-shadow:0 4px 20px rgba(199,255,0,.4);cursor:pointer;transition:transform .2s}.accessibility-btn:hover{transform:scale(1.08)}.accessibility-panel{position:fixed;bottom:90px;left:24px;width:270px;background:var(--card);border:1px solid var(--border);border-radius:1.25rem;padding:1.4rem;z-index:9998;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none}.accessibility-title{font-weight:900;color:#fff;font-size:1rem;text-align:right;margin-bottom:1rem}.accessibility-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:.75rem 0;color:var(--grey);font-size:.9rem;text-align:right}.accessibility-row input{position:absolute;opacity:0;pointer-events:none}.toggle-switch{position:relative;width:42px;height:24px;border-radius:12px;background:#2a2a2a;flex:0 0 auto;transition:background .2s}.toggle-switch::before{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s}.accessibility-row input:checked+.toggle-switch{background:var(--lime)}.accessibility-row input:checked+.toggle-switch::before{left:21px}.accessibility-footer{font-size:.72rem;color:#555;text-align:right;margin-top:1rem;line-height:1.6}body.high-contrast{filter:contrast(1.5) brightness(1.1)}body.highlight-links a{outline:2px solid var(--lime)!important;text-decoration:underline!important}body.no-animations *,body.no-animations *::before,body.no-animations *::after{animation:none!important;transition:none!important}
-    #mobile-menu{display:none}#mobile-menu.open{display:flex}
-    @media(max-width:1024px) and (min-width:769px){.budget-grid{grid-template-columns:1fr 1fr}}
-    @media(max-width:768px){section{padding:clamp(1.5rem,4vw,2.8rem) 1rem!important}.hero{min-height:auto;padding-top:100px!important;padding-bottom:clamp(2.5rem,8vw,4rem)!important}.hero-title{font-size:clamp(2rem,7vw,3.2rem)}#hero-canvas{opacity:.45}.hero .btn-lime{width:100%}.team-grid,.pain-bento,.form-row,.budget-grid{grid-template-columns:1fr}.marquee-track{animation-duration:32s}.ticker-num{font-size:1.1rem}.ticker-label{font-size:.75rem}.ticker-item{padding:.85rem 1.35rem}.swiper-videos .swiper-slide{max-width:none!important;width:76vw!important}.team-card,.team-card-inner{min-height:650px}.team-card:hover .team-card-inner{transform:none}.team-card.is-flipped .team-card-inner{transform:rotateY(180deg)}.accessibility-panel{left:1rem;right:1rem;width:auto}.accessibility-btn{left:1rem;bottom:1rem}}
-    @media(pointer:coarse){.cursor-dot,.cursor-ring{display:none}}@media(pointer:fine){body,a,button,input,label,.video-card{cursor:none}}
-    @media(hover:none){.video-card,.video-card:hover,.card:hover,.btn-lime:hover{transform:none!important}.play-badge{opacity:1;transform:scale(.9)}}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}.reveal,.q-card{opacity:1!important;transform:none!important}#hero-canvas,.ambient-blob,.cursor-dot,.cursor-ring{display:none!important}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baduk AI | תוכן AI שמביא תוצאות</title>
+<meta name="description" content="Baduk AI מחברת בין שיווק, קריאייטיב וטכנולוגיית AI כדי לייצר לעסקים תוכן חד, זכיר ומכוון תוצאה — בלי ימי צילום ובלי לעמוד מול מצלמה.">
+<link rel="canonical" href="https://badukai.net/">
+<meta property="og:title" content="Baduk AI | תוכן AI שמביא תוצאות">
+<meta property="og:description" content="Baduk AI מחברת בין שיווק, קריאייטיב וטכנולוגיית AI כדי לייצר לעסקים תוכן חד, זכיר ומכוון תוצאה — בלי ימי צילום ובלי לעמוד מול מצלמה.">
+<meta property="og:url" content="https://badukai.net/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Baduk AI | תוכן AI שמביא תוצאות">
+<meta name="twitter:description" content="Baduk AI מחברת בין שיווק, קריאייטיב וטכנולוגיית AI כדי לייצר לעסקים תוכן חד, זכיר ומכוון תוצאה — בלי ימי צילום ובלי לעמוד מול מצלמה.">
+<!-- META PIXEL PLACEHOLDER: META_PIXEL_ID_HERE -->
+<!-- GOOGLE ANALYTICS / GTM PLACEHOLDER: GA_OR_GTM_ID_HERE -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050505;--bg-2:#0a0a09;--card:#141412;--border:#2a2a28;
+  --lime:#C7FF00;--text:#F5F3EE;--grey:#B9B7AE;--grey-dim:#7d7c74;
+  --radius-lg:1.5rem;--radius-md:1.1rem;--radius-sm:.7rem;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Assistant',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;font-size:17px;line-height:1.5}
+a{color:inherit;text-decoration:none}img{max-width:100%;height:auto;display:block}
+button,input{font-family:inherit}
+strong{color:#fff;font-weight:800}
+.lime{color:var(--lime)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 1.25rem}
+.wrap-narrow{max-width:760px;margin:0 auto;padding:0 1.25rem}
+section{position:relative}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:4px}
+.skip-link{position:fixed;top:-60px;right:1rem;background:var(--lime);color:#050505;font-weight:800;padding:.7rem 1.2rem;border-radius:.6rem;z-index:9999;transition:top .2s}
+.skip-link:focus{top:1rem}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.14;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E")}
+header,main,footer{position:relative;z-index:1}
+
+#scroll-progress{position:fixed;top:0;inset-inline-start:0;width:0;height:3px;background:var(--lime);box-shadow:0 0 16px var(--lime);z-index:200}
+
+/* header */
+.site-header{position:fixed;top:0;inset-inline:0;z-index:100;background:rgba(5,5,5,.7);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border);transition:background .3s,border-color .3s}
+.site-header.scrolled{background:rgba(5,5,5,.92);border-color:rgba(199,255,0,.3)}
+.header-inner{max-width:1100px;margin:0 auto;padding:0 1.25rem;height:68px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:.7rem}
+.logo-b{width:38px;height:38px;border-radius:10px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-weight:900;color:#050505;font-size:19px;flex-shrink:0}
+.brand-name{font-weight:900;font-size:1.05rem;display:block;line-height:1.1}
+.brand-sub{display:block;font-size:.65rem;color:var(--grey-dim);margin-top:1px}
+.main-nav{display:none;align-items:center;gap:1.8rem;font-size:.95rem;color:var(--grey)}
+.main-nav a{transition:color .2s}
+.main-nav a:hover{color:#fff}
+.nav-cta{background:var(--lime);color:#050505!important;font-weight:800;padding:10px 22px;border-radius:1rem;font-size:.9rem}
+.menu-btn{display:flex;background:none;border:none;color:#fff;padding:6px;cursor:pointer}
+.mobile-menu{display:none;flex-direction:column;gap:.2rem;background:rgba(5,5,5,.98);border-top:1px solid var(--border);padding:.5rem 1.25rem 1.25rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:#ddd;font-size:1.05rem;padding:.7rem 0;border-bottom:1px solid var(--border)}
+.mobile-menu .nav-cta{text-align:center;margin-top:.7rem;border-bottom:none}
+@media(min-width:900px){.main-nav{display:flex}.menu-btn{display:none}}
+
+.btn-lime{display:inline-flex;align-items:center;justify-content:center;background:var(--lime);color:#050505;font-weight:900;border:none;border-radius:1.1rem;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 0 0 rgba(199,255,0,0)}
+.btn-lime:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(199,255,0,.22)}
+.btn-block{width:100%}
+
+/* hero */
+.hero{min-height:100svh;padding:88px 1.25rem 3rem;display:flex;align-items:center}
+.hero-inner{max-width:1080px;margin:0 auto;width:100%}
+.hero-top{max-width:660px;margin:0 auto;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.04);border:1px solid rgba(199,255,0,.4);border-radius:99px;padding:8px 18px;font-size:.85rem;color:var(--grey);margin-bottom:1.3rem}
+.hero-badge::before{content:"✦";color:var(--lime)}
+.hero-title{font-size:clamp(1.9rem,5.2vw,3.6rem);font-weight:900;line-height:1.16;margin-bottom:1.1rem}
+.hero-title span{display:block}
+.hero-body{color:#dcdad2;font-size:clamp(.95rem,2vw,1.1rem);line-height:1.55;max-width:600px;margin:0 auto 1.8rem;display:flex;flex-direction:column;gap:.5rem}
+.hero-grid{max-width:600px;margin:0 auto}
+
+.form-card{position:relative;background:linear-gradient(150deg,rgba(20,20,18,.96),rgba(8,8,7,.98));border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.2rem 2rem;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.form-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(199,255,0,.4),transparent 40%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.form-title{font-size:clamp(1.15rem,2.6vw,1.4rem);font-weight:900;margin-bottom:1.2rem;color:#fff}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.field-group{display:flex;flex-direction:column;gap:.4rem}
+.field-label{font-size:.86rem;font-weight:700;color:#ccc}
+.field{width:100%;padding:13px 16px;border-radius:.85rem;background:#0c0c0b;border:1.5px solid var(--border);color:#fff;font-size:1rem;outline:none;transition:.2s}
+.field::placeholder{color:#5c5b55}
+.field:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(199,255,0,.1)}
+.field[aria-invalid="true"]{border-color:#ff5c5c}
+.field-error{font-size:.78rem;color:#ff8080;min-height:1em}
+.field-error:empty{display:none;min-height:0}
+.consent-row{display:flex;align-items:flex-start;gap:.65rem;margin-top:1.1rem}
+.consent-row input{width:19px;height:19px;margin-top:2px;accent-color:var(--lime);flex-shrink:0}
+.consent-row label{font-size:.84rem;color:var(--grey);line-height:1.5}
+.consent-row a{color:var(--lime);text-decoration:underline}
+.form-submit{margin-top:1.2rem;padding:16px;font-size:1.05rem;border-radius:1rem}
+.form-micro{text-align:center;font-size:.78rem;color:var(--grey-dim);margin-top:.7rem}
+.form-status{margin-top:1rem;font-size:.9rem;text-align:center;min-height:1em}
+.form-status.error{color:#ff8080}
+.form-success{text-align:center;padding:1.5rem 0}
+.form-success .check{font-size:2.6rem;margin-bottom:.6rem}
+.form-success h3{font-size:1.4rem;font-weight:900;color:var(--lime);margin-bottom:.4rem}
+.form-success p{color:var(--grey);font-size:.95rem}
+
+.hero-shape{position:absolute;pointer-events:none;z-index:-1;filter:blur(2px);opacity:.5}
+.hero-shape-1{top:6%;right:2%;width:220px;height:220px;background:radial-gradient(circle,rgba(199,255,0,.14),transparent 70%);border-radius:50%}
+.hero-shape-2{bottom:0;left:0;width:260px;height:260px;background:radial-gradient(circle,rgba(199,255,0,.08),transparent 70%);border-radius:50%}
+
+@media(max-width:640px){
+  .header-inner{height:52px}
+  .hero{padding:60px .9rem 1.6rem;min-height:auto}
+  .hero-badge{font-size:.68rem;padding:5px 11px;margin-bottom:.55rem;line-height:1.3}
+  .hero-title{font-size:clamp(1.28rem,6.6vw,1.7rem);line-height:1.2;margin-bottom:.5rem}
+  .hero-body{font-size:.82rem;line-height:1.4;gap:.25rem;margin-bottom:.9rem}
+  .field-group{gap:.25rem}
+  .form-card{padding:1rem .9rem;border-radius:1.1rem}
+  .form-title{font-size:.98rem;margin-bottom:.7rem;line-height:1.3}
+  .form-row{grid-template-columns:1fr;gap:.45rem}
+  .field-label{font-size:.8rem}
+  .field{padding:9px 13px;font-size:.92rem;border-radius:.7rem}
+  .consent-row{margin-top:.7rem}
+  .consent-row label{font-size:.78rem;line-height:1.4}
+  .form-submit{padding:12px;font-size:.95rem;margin-top:.7rem}
+  .form-micro{font-size:.72rem;margin-top:.5rem}
+}
+@media(max-width:360px){
+  .hero-title{font-size:clamp(1.15rem,6.8vw,1.5rem)}
+}
+
+/* section headers */
+.sec-head{max-width:680px;margin:0 auto 2.2rem;text-align:center}
+.sec-title{font-size:clamp(1.6rem,4.2vw,2.6rem);font-weight:900;line-height:1.2}
+.sec-title span{display:block}
+.sec-sub{color:var(--grey);font-size:1.02rem;margin-top:.8rem}
+.divider{height:1px;background:linear-gradient(to left,transparent,var(--border),rgba(199,255,0,.28),var(--border),transparent);max-width:1100px;margin:0 auto}
+
+/* portfolio marquee */
+.portfolio-section{padding:4.5rem 0}
+.marquee-row{overflow:hidden;direction:ltr;margin-bottom:1.1rem}
+.marquee-track{display:flex;gap:1rem;width:max-content;animation:marquee-scroll 42s linear infinite}
+.marquee-row.dir-b .marquee-track{animation-direction:reverse}
+@keyframes marquee-scroll{to{transform:translateX(-50%)}}
+.marquee-row:hover .marquee-track,.marquee-row:focus-within .marquee-track{animation-play-state:paused}
+.video-card{position:relative;flex-shrink:0;width:180px;aspect-ratio:9/16;border-radius:1.1rem;overflow:hidden;background:var(--card);border:1px solid var(--border);cursor:pointer;padding:0;transition:border-color .25s,box-shadow .25s,transform .25s}
+.video-card:hover{border-color:rgba(199,255,0,.55);box-shadow:0 0 30px rgba(199,255,0,.18);transform:translateY(-3px)}
+.video-card img{width:100%;height:100%;object-fit:cover}
+.video-card .play-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,.05) 45%)}
+.video-card .play-badge span{width:46px;height:46px;border-radius:50%;background:var(--lime);color:#050505;display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 0 22px rgba(199,255,0,.4)}
+@media(min-width:640px){.video-card{width:210px}}
+@media(pointer:coarse){
+  .marquee-row{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .marquee-row::-webkit-scrollbar{display:none}
+  .marquee-track{animation:none!important}
+}
+@media(prefers-reduced-motion:reduce){.marquee-track{animation:none!important}.marquee-row{overflow-x:auto}}
+
+/* about / positioning */
+.about-section{padding:4.5rem 0}
+.about-heading{max-width:820px;margin:0 auto 2.4rem;text-align:center;font-size:clamp(1.7rem,4.6vw,2.9rem);font-weight:900;line-height:1.25}
+.about-body{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:1.6rem}
+.about-body p{font-size:clamp(1rem,2vw,1.15rem);line-height:1.75;color:#e4e2da}
+u{text-decoration-color:var(--lime);text-underline-offset:4px;text-decoration-thickness:2px}
+.pull-quote{font-size:clamp(1.3rem,3.2vw,1.8rem);font-weight:800;line-height:1.4;color:var(--lime);text-align:center;padding:.6rem 0}
+
+/* testimonials wall */
+.testi-section{padding:4.5rem 0}
+.wall{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:1.6rem;max-width:1000px;margin:0 auto}
+.wall-item{background:var(--card);border:1px solid var(--border);border-radius:1.2rem;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35);padding:0;cursor:pointer;border-width:1px}
+.wall-item img{display:block}
+.wall-item.video{width:210px;aspect-ratio:9/16;position:relative}
+.wall-item.video img{width:100%;height:100%;object-fit:cover}
+.wall-item.video .play-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(to top,rgba(0,0,0,.5),rgba(0,0,0,.05) 45%)}
+.wall-item.video .play-badge span{width:44px;height:44px;border-radius:50%;background:var(--lime);color:#050505;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.wall-item.shot{width:250px}
+.wall-item.shot img{width:100%;height:auto}
+.wall-item:nth-child(1){transform:rotate(-2deg);margin-top:0}
+.wall-item:nth-child(2){transform:rotate(1.6deg);margin-top:2.6rem}
+.wall-item:nth-child(3){transform:rotate(-1deg);margin-top:-.8rem}
+.wall-item:nth-child(4){transform:rotate(2.2deg);margin-top:1.8rem}
+.wall-item:nth-child(5){transform:rotate(-1.6deg);margin-top:.4rem}
+.wall-item:hover{transform:rotate(0) translateY(-4px) scale(1.02);border-color:rgba(199,255,0,.4)}
+@media(max-width:640px){
+  .wall{flex-direction:column;align-items:center;gap:1.4rem}
+  .wall-item:nth-child(1),.wall-item:nth-child(2),.wall-item:nth-child(3),.wall-item:nth-child(4),.wall-item:nth-child(5){margin-top:0}
+  .wall-item.video,.wall-item.shot{width:min(78vw,300px)}
+  .wall-item:nth-child(odd){transform:rotate(-1.2deg)}
+  .wall-item:nth-child(even){transform:rotate(1.2deg)}
+}
+
+/* case study */
+.case-section{padding:4.5rem 0}
+.case-inner{max-width:760px;margin:0 auto;text-align:center}
+.case-shot{margin:2.2rem auto;max-width:420px;border-radius:1.3rem;overflow:hidden;border:1px solid var(--border);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.case-body{display:flex;flex-direction:column;gap:1.7rem;text-align:right;max-width:680px;margin:0 auto}
+.case-body p{font-size:clamp(1.1rem,2.2vw,1.34rem);line-height:1.85;color:var(--text)}
+.case-closing{margin-top:1.8rem;display:flex;flex-direction:column;gap:.7rem;align-items:center}
+.case-number{font-size:clamp(2.3rem,7vw,4rem);font-weight:900;color:var(--lime)}
+.case-lead-in{font-size:1.15rem;font-weight:700}
+.case-closing .pull-quote{max-width:520px}
+
+/* final cta */
+.cta-section{padding:5rem 0 6rem;text-align:center}
+.cta-inner{max-width:640px;margin:0 auto}
+.cta-title{font-size:clamp(1.7rem,4.6vw,2.7rem);font-weight:900;line-height:1.25;margin-bottom:1rem}
+.cta-body{color:var(--grey);font-size:1.05rem;line-height:1.65;margin-bottom:1.8rem}
+.cta-btn{padding:18px 40px;font-size:1.1rem}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+.reveal.revealed{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* footer */
+footer{padding:2.4rem 1.25rem;text-align:center;border-top:1px solid var(--border)}
+.footer-brand{display:flex;align-items:center;justify-content:center;gap:.7rem;margin-bottom:.6rem}
+.footer-copy{color:var(--grey-dim);font-size:.82rem}
+.footer-legal{background:none;border:none;color:#666;font-size:.82rem;cursor:pointer;text-decoration:underline;margin-top:.4rem;font-family:inherit}
+
+/* privacy modal */
+.privacy-overlay{position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:999;display:none;align-items:center;justify-content:center;padding:1rem}
+.privacy-overlay.open{display:flex}
+.privacy-box{max-width:680px;width:90%;max-height:82vh;overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:1.4rem;padding:2.4rem 2rem;position:relative}
+.privacy-close{position:absolute;top:1rem;left:1rem;color:var(--lime);font-size:2rem;background:none;border:none;cursor:pointer;line-height:1}
+.privacy-title{font-size:1.35rem;font-weight:900;margin-bottom:1.4rem;display:block}
+.privacy-box h3{color:var(--lime);font-size:1rem;font-weight:900;margin:1.3rem 0 .4rem}
+.privacy-box p{color:var(--grey);font-size:.92rem;line-height:1.8}
+
+/* accessibility widget */
+.a11y-btn{position:fixed;bottom:20px;left:20px;z-index:998;width:48px;height:48px;border-radius:50%;background:var(--lime);color:#050505;font-size:1.3rem;border:none;box-shadow:0 4px 18px rgba(199,255,0,.35);cursor:pointer}
+.a11y-panel{position:fixed;bottom:80px;left:20px;width:260px;background:var(--card);border:1px solid var(--border);border-radius:1.1rem;padding:1.2rem;z-index:998;display:none;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.a11y-panel.open{display:block}
+.a11y-title{font-weight:900;font-size:.95rem;margin-bottom:.9rem}
+.a11y-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:.65rem 0;color:var(--grey);font-size:.86rem}
+.a11y-row input{position:absolute;opacity:0}
+.toggle{position:relative;width:38px;height:22px;border-radius:12px;background:#2a2a28;flex-shrink:0}
+.toggle::before{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s}
+.a11y-row input:checked+.toggle{background:var(--lime)}
+.a11y-row input:checked+.toggle::before{left:19px}
+body.high-contrast{filter:contrast(1.5) brightness(1.1)}
+body.highlight-links a{outline:2px solid var(--lime)!important;text-decoration:underline!important}
+body.no-animations *,body.no-animations *::before,body.no-animations *::after{animation:none!important;transition:none!important}
+
+/* media modal */
+.media-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;display:none;align-items:center;justify-content:center;padding:1.2rem}
+.media-overlay.open{display:flex}
+.media-box{position:relative;max-width:min(92vw,480px);max-height:88vh;width:100%}
+.media-box video,.media-box img{width:100%;max-height:88vh;border-radius:1rem;background:#000;display:block;margin:0 auto}
+.media-close{position:absolute;top:-46px;left:0;background:none;border:none;color:#fff;font-size:2.1rem;cursor:pointer;line-height:1}
+@media(max-width:640px){.media-close{top:-42px;left:0}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
 </head>
 <body>
-<div id="scroll-progress"></div><div class="cursor-dot" id="cursor-dot"></div><div class="cursor-ring" id="cursor-ring"></div><div class="ambient-blob" id="ambient-blob"></div>
-<header class="glass fixed top-0 inset-x-0 z-50" id="site-header"><div style="max-width:1100px;margin:0 auto;padding:0 1.25rem;height:68px;display:flex;align-items:center;justify-content:space-between;"><a href="#" style="display:flex;align-items:center;gap:.75rem;"><div class="logo-b">B</div><div><span style="font-weight:900;font-size:1.1rem;display:block;">Baduk AI</span><span style="display:block;font-size:.68rem;color:#444;line-height:1;margin-top:1px;">בדוק שזה AI</span></div></a><nav class="hidden md:flex items-center gap-6" style="font-size:.95rem;color:var(--grey);"><a href="#problem" class="nav-link">הבעיה</a><a href="#team" class="nav-link">הצוות</a><a href="#qualify" class="nav-link">סינון</a><a href="#contact" class="nav-link">יצירת קשר</a><a href="#contact" class="btn-lime lime-glow" style="padding:11px 24px;font-size:.92rem;border-radius:1.25rem;color:#050505;font-weight:900;">פגישת פיצוח בחינם ←</a></nav><button onclick="toggleMenu()" class="md:hidden" style="background:none;border:none;color:#fff;padding:4px;"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div><div id="mobile-menu" class="flex-col gap-3 px-5 pb-5" style="background:rgba(5,5,5,.97);border-top:1px solid #1a1a1a;"><a href="#problem" onclick="toggleMenu()" style="color:#ddd;font-size:1.1rem;padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:block;">הבעיה</a><a href="#team" onclick="toggleMenu()" style="color:#ddd;font-size:1.1rem;padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:block;">הצוות</a><a href="#qualify" onclick="toggleMenu()" style="color:#ddd;font-size:1.1rem;padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:block;">סינון</a><a href="#contact" onclick="toggleMenu()" style="color:#ddd;font-size:1.1rem;padding:.5rem 0;border-bottom:1px solid #1a1a1a;display:block;">יצירת קשר</a><a href="#contact" onclick="toggleMenu()" class="btn-lime lime-glow" style="padding:15px;font-size:1.05rem;margin-top:.4rem;display:block;text-align:center;color:#050505;font-weight:900;border-radius:1.25rem;">פגישת פיצוח בחינם ←</a></div></header>
-<section class="hero"><canvas id="hero-canvas"></canvas><div class="hero-inner reveal"><div class="hero-kicker"><span style="color:var(--lime);font-weight:800;">✦</span>מתאים לבעלי עסקים או סוכנויות שיווק שמשווקות ברשתות ועושות מעל 20,000 ש"ח בחודש</div><h1 class="hero-title"><span class="word-reveal" style="--d:80ms">יצירת</span> <span class="word-reveal" style="--d:180ms">תוכן</span> <span class="word-reveal" style="--d:280ms">AI.</span><br><span class="lime lime-shadow" style="font-size:clamp(1.5rem,4vw,2.5rem);display:block;margin-top:.4em;"><span class="word-reveal" style="--d:430ms">פחות</span> <span class="word-reveal" style="--d:520ms">הפקה,</span> <span class="word-reveal" style="--d:610ms">יותר</span> <span class="word-reveal" style="--d:700ms">המרה.</span> <span class="word-reveal" style="--d:790ms">זה</span> <span class="word-reveal" style="--d:880ms">בדוק.</span></span></h1><div class="hero-copy"><p>הגיע הזמן לדלג מעל הלוגיסטיקה של העולם הישן.</p><p>אנחנו מייצרים עבור העסק שלכם סרטוני פרסום חדים ברמת גימור קולנועית ובשנינות ישראלית,</p><p>בלי שחקנים ובלי לשרוף עשרות אלפי שקלים על ימי הפקה מורכבים.</p><p><strong>שילוב מדויק בין אסטרטגיה שיווקית לביצוע בAI שמביא תוצאות.</strong></p></div><a href="#contact" class="btn-lime btn-pulse" style="padding:20px 46px;font-size:clamp(1.05rem,2.5vw,1.25rem);">אני רוצה שנדבר ←</a></div></section>
-<section style="padding:2.5rem 0 2rem;"><div class="wrap reveal" style="margin-bottom:1.4rem;"><div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">עבודות אחרונות</span></div><h2 style="font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;">ראו במו עיניכם</h2></div><div style="padding-right:1.25rem;"><div class="swiper swiper-videos"><div class="swiper-wrapper">
-<div class="swiper-slide" style="max-width:230px;"><div class="video-card"><div class="play-overlay"><div class="play-btn-big">▶</div></div><iframe src="https://www.youtube.com/embed/WQtKGjyTAq4?controls=1&playsinline=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:auto;z-index:0;" allow="autoplay; encrypted-media"></iframe></div></div>
-<div class="swiper-slide" style="max-width:230px;"><div class="video-card"><div class="play-overlay"><div class="play-btn-big">▶</div></div><iframe src="https://www.youtube.com/embed/3SjTLk9ElLs?controls=1&playsinline=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:auto;z-index:0;" allow="autoplay; encrypted-media"></iframe></div></div>
-<div class="swiper-slide" style="max-width:230px;"><div class="video-card"><div class="play-overlay"><div class="play-btn-big">▶</div></div><iframe src="https://www.youtube.com/embed/oRz3-VpgvBQ?controls=1&playsinline=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:auto;z-index:0;" allow="autoplay; encrypted-media"></iframe></div></div>
-<div class="swiper-slide" style="max-width:230px;"><div class="video-card"><div class="play-overlay"><div class="play-btn-big">▶</div></div><iframe src="https://www.youtube.com/embed/Ylus0otzBuA?controls=1&playsinline=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:auto;z-index:0;" allow="autoplay; encrypted-media"></iframe></div></div>
-</div><div class="swiper-pagination" style="bottom:0;"></div></div></div></section>
-<div class="divider"></div><div class="ticker-container" style="padding:1rem 0;"><div class="marquee-wrapper"><div class="marquee-track"><div class="ticker-item"><span class="ticker-num" data-count="20" data-suffix="+">20+</span><span class="ticker-label">לקוחות</span></div><div class="ticker-item"><span class="ticker-num" data-count="40" data-suffix="+">40+</span><span class="ticker-label">הפקות AI</span></div><div class="ticker-item"><span class="ticker-num" data-count="1000" data-suffix="+">1,000+</span><span class="ticker-label">מודעות</span></div><div class="ticker-item"><span class="ticker-num" data-count="5" data-suffix="+">5+</span><span class="ticker-label">שנים בשוק</span></div><div class="ticker-item"><span class="ticker-num" data-count="100" data-suffix="%">100%</span><span class="ticker-label">ישראלי ועסקי</span></div><div class="ticker-item"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div></div><div class="marquee-track"><div class="ticker-item"><span class="ticker-num" data-count="20" data-suffix="+">20+</span><span class="ticker-label">לקוחות</span></div><div class="ticker-item"><span class="ticker-num" data-count="40" data-suffix="+">40+</span><span class="ticker-label">הפקות AI</span></div><div class="ticker-item"><span class="ticker-num" data-count="1000" data-suffix="+">1,000+</span><span class="ticker-label">מודעות</span></div><div class="ticker-item"><span class="ticker-num" data-count="5" data-suffix="+">5+</span><span class="ticker-label">שנים בשוק</span></div><div class="ticker-item"><span class="ticker-num" data-count="100" data-suffix="%">100%</span><span class="ticker-label">ישראלי ועסקי</span></div><div class="ticker-item"><span class="ticker-num">∞</span><span class="ticker-label">קריאייטיבים</span></div></div></div></div><div class="divider"></div>
-<section id="problem" style="padding:2.8rem 1.25rem;"><div style="max-width:880px;margin:0 auto;"><div class="reveal" style="margin-bottom:1.8rem;"><div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">הבעיה</span></div><h2 style="font-size:clamp(1.6rem,4.5vw,3rem);font-weight:900;line-height:1.18;margin-bottom:.9rem;">אומרים שתוכן הוא המלך.<br><span class="lime">הם צודקים, אבל פה בדיוק אתם נתקעים.</span></h2><div style="color:var(--grey);font-size:1.02rem;display:flex;flex-direction:column;gap:.4rem;"><p>היום כבר כולם מבינים שהשיווק שלכם יקום או ייפול על דבר אחד בלבד: <strong>רמת הקריאייטיב שאתם מעלים לאוויר.</strong></p><p>אבל כשמנסים ליישם את זה בשטח, פוגשים קיר בטון של שתי בעיות מרכזיות:</p></div></div><div class="pain-bento"><div class="card pain-card reveal"><div class="ghost-num">01</div><div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;position:relative;z-index:1;"><div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">01</div><h3 class="pain-box-title">מחסום האיכות: העולם הישן לא עומד בסטנדרט</h3></div><div class="pain-desc"><p><strong>המציאות בשטח:</strong> הסטנדרט ברשתות החברתיות עלה. פשוט אין לכם את <strong>הזמן או הכלים</strong> להגיע לרמת הגימור שמותג מוביל צריך.</p><p><strong>המכשול ההפקתי:</strong> כדי לייצר סרטון אחד שנראה <strong>פרימיום, שנון וקולנועי</strong>, אתם צריכים להשקיע ימים של עבודה, לכתוב תסריט, לצלם, לערוך ולתקן.</p><p style="color:var(--lime);font-weight:700;margin-top:.3rem;">(טוב, אלא אם כן אתם עובדים איתנו, ואז השמיים הם הגבול 😉)</p></div></div><div class="card pain-card reveal"><div class="ghost-num">02</div><div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;position:relative;z-index:1;"><div style="width:32px;height:32px;border-radius:8px;background:rgba(199,255,0,.08);border:1px solid rgba(199,255,0,.2);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:900;color:var(--lime);flex-shrink:0;">02</div><h3 class="pain-box-title">מחסום הכמות: יש גבול לכמות הווריאציות שאתם יכולים לבדוק</h3></div><div class="pain-desc"><p><strong>האמת השיווקית:</strong> שיווק הוא לא קסם, הוא <strong>מדע של ניסוי וטעייה.</strong> כדי לפצח מסר שיווקי אחד, אתם חייבים לתקוף אותו מכמה היבטים שונים, לבחון זוויות קופי שונות.</p><p><strong>המכשול ההפקתי:</strong> לייצר וריאציות בכמויות גבוהות בעולם הישן אומר לשרוף <strong>עשרות אלפי שקלים</strong> רק על ימי הפקה חוזרים.</p></div></div></div><div class="highlight-box reveal"><h3 style="font-size:clamp(1rem,2.8vw,1.4rem);font-weight:900;color:#fff;margin-bottom:.9rem;line-height:1.4;">בשנת 2026, הסיכוי שלכם לתפוס את תשומת הלב של הלקוח בפיד הוא כמעט אפסי. <span style="font-size:.82rem;color:var(--grey);font-weight:400;">(שוב, לא כשאתם איתנו, כן?)</span></h3><div style="color:var(--grey);font-size:1rem;display:flex;flex-direction:column;gap:.55rem;"><p>אבל בואו נניח שהצלחתם. הגולש עצר את האצבע. עכשיו מגיעה השאלה האמיתית: <strong>האם זאת הגישה הנכונה שתגרום לו לסמוך עליכם ולהתקדם דווקא אתכם?</strong> האם המסר שלכם עובר בצורה מדויקת או שהוא סתם ראה עוד סרטון נחמד והמשיך לגלול?</p><p>בדיוק בגלל זה הקמנו את <span class="lime" style="font-weight:700;">Baduk AI.</span> אנחנו לא כאן בשביל לייצר לכם "סרטונים יפים" שיקבלו לייקים מהחברים. <strong>אנחנו כאן כדי לבנות לעסק שלכם מכונת קריאייטיב שעובדת על דלק מטוסים.</strong></p><p>אנחנו לוקחים את המסר שלכם, מפצחים אותו אסטרטגית, ומייצרים ממנו <strong>זוויות ויזואליות שנונות וממירות בבינה מלאכותית</strong> בקצב ובאיכות שהמתחרים שלכם לא יצליחו להבין מאיפה זה נחת עליהם.</p></div></div></div></section><div class="divider"></div>
-<section id="team" style="padding:2.8rem 1.25rem;"><div style="max-width:880px;margin:0 auto;"><div class="reveal" style="margin-bottom:1.8rem;"><div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">הצוות</span></div><h2 style="font-size:clamp(1.6rem,4.5vw,3rem);font-weight:900;line-height:1.18;">הפנים מאחורי <span class="lime">Baduk AI</span></h2></div><div class="team-grid reveal"><div class="team-card" tabindex="0"><div class="team-card-inner"><div class="team-face"><div class="team-photo"><img src="liran.jpg" alt="לירן יצחקי" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="team-photo-placeholder" style="display:none;"><div class="team-initials">לי</div><div style="font-size:.75rem;color:rgba(199,255,0,.3);font-weight:700;">לירן יצחקי</div></div></div><div class="team-body"><div class="team-name">לירן יצחקי</div><div class="team-role">בעלים</div><div class="team-bio"><p>מגיע מעולמות העיצוב הגרפי ועריכת הווידאו, <strong>מומחה בהפיכת רעיון מופשט ליצירת מופת קולנועית.</strong></p><p>מאחוריו ניסיון שטח עשיר מול החברות, הארגונים ובעלי העסקים המובילים בישראל, עבורם ייצר במו ידיו <strong>למעלה מ1,000 פיסות תוכן</strong> שסביר להניח שכבר נחשפתם אליהן בפיד שלכם בלי לדעת שהוא חתום עליהן.</p><p>משנת 2025 הצטרף למהפכת הAI והפך <strong>לאמן תוכן מבוסס בינה מלאכותית</strong> שלא משאיר קצוות פתוחים.</p></div><div class="team-quote">"פעם לייצר תוכן הרגיש כמו לנסוע על מרצדס, היום אני טס בחללית. עוד לא נתקלתי בצורך ויזואלי שלא הצלחתי להביא לידי יישום."</div></div></div><div class="team-face team-back"><div class="team-back-quote">"פעם לייצר תוכן הרגיש כמו לנסוע על מרצדס, היום אני טס בחללית. עוד לא נתקלתי בצורך ויזואלי שלא הצלחתי להביא לידי יישום."</div></div></div></div><div class="team-card" tabindex="0"><div class="team-card-inner"><div class="team-face"><div class="team-photo"><img src="ido.jpg" alt="עידו צפניה" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="team-photo-placeholder" style="display:none;"><div class="team-initials">עי</div><div style="font-size:.75rem;color:rgba(199,255,0,.3);font-weight:700;">עידו צפניה</div></div></div><div class="team-body"><div class="team-name">עידו צפניה</div><div class="team-role">בעלים</div><div class="team-bio"><p>מגיע מעולמות השיווק והמכירות, עם <strong>למעלה מ-5 שנות ניסיון מעשי בשטח</strong> בבניית משפכי שיווק מורכבים עבור בעלי העסקים ויוצרי תוכן בארץ.</p><p>מאחוריו תכנון והובלה של מערכים שיווקיים שלמים מדפי נחיתה ממירים <strong>ועד לקמפיינים ממומנים שהניבו החזרי השקעה גבוהים במיוחד.</strong></p><p>המוח האסטרטגי שמפצח את המסרים ומבטיח שהוויזואל המשוגע <strong>יתורגם ישירות לשורה התחתונה.</strong></p></div><div class="team-quote">"המכירה האמיתית מתחילה בשיווק. שיווק טוב מעביר את המסר לאורכו ולרוחבו, ומכין את הלקוח לקנייה עוד לפני שבכלל נוצרה איתו האינטראקציה הראשונה."</div></div></div><div class="team-face team-back"><div class="team-back-quote">"המכירה האמיתית מתחילה בשיווק. שיווק טוב מעביר את המסר לאורכו ולרוחבו, ומכין את הלקוח לקנייה עוד לפני שבכלל נוצרה איתו האינטראקציה הראשונה."</div></div></div></div></div></div></section><div class="divider"></div>
-<section id="qualify" style="padding:2.8rem 1.25rem;"><div style="max-width:880px;margin:0 auto;"><div class="reveal" style="margin-bottom:1.8rem;"><div class="sec-tag"><div class="sec-tag-bar"></div><span class="sec-tag-text">מי אנחנו מחפשים</span></div><h2 style="font-size:clamp(1.6rem,4.5vw,3rem);font-weight:900;line-height:1.18;">אנחנו לא עובדים עם כל אחד.<br><span class="lime">אנחנו מחפשים עסקים שיתנו לנו יד חופשית לעשות את מה שאנחנו הכי טובים בו.</span></h2></div><div class="qualify-stack reveal" id="qualify-stack"><div class="qualify-progress"></div><div class="q-card"><div class="q-header"><div class="q-icon">🎯</div><h3 class="q-title">אנחנו לא פס ייצור המוני.</h3></div><div class="q-desc"><p>כדי להביא את התוצאות שאנחנו מתחייבים אליהן, אנחנו משקיעים בכל פרויקט את <strong>מלוא המשאבים האסטרטגיים והוויזואליים שלנו.</strong> בגלל זה, אנחנו מגבילים באופן קשיח את כמות הלקוחות שאנחנו מקבלים בכל חודש.</p></div></div><div class="q-card"><div class="q-header"><div class="q-icon">⚡</div><h3 class="q-title">כל סרטון עובר דרך הידיים שלנו.</h3></div><div class="q-desc"><p>בניגוד לסוכנויות הגדולות, אצלנו אתם לא משלמים כסף רק כדי שיעבירו אתכם לפרילאנסר חיצוני או למתמחה שיעשה עליכם סטאז'. <strong>כל סרטון, כל מסר וכל קריאייטיב מיוצר ועובר ישירות דרך הידיים שלנו</strong> צוות מקצוען ומצומצם של אנשים עם למעלה מ-5 שנות ניסיון בשטח בעולמות השיווק והקריאייטיב.</p></div></div><div class="q-card"><div class="q-header"><div class="q-icon">🚫</div><h3 class="q-title">מחפשים "סרטוני AI זולים" לסמן וי? אנחנו לא הכתובת.</h3></div><div class="q-desc"><p>אם אתם מחפשים עוד חברת מדיה גנרית <strong>אנחנו פשוט לא הכתובת.</strong> אבל אם יש לכם מוצר מעולה, תקציב פרסום קיים, ואתם מבינים <strong>שהתוכן שלכם בדיגיטל משפיע בצורה ישירה על כמה כסף ייכנס בסוף החודש</strong> בואו נדבר.</p></div></div></div></div></section><div class="divider"></div>
-<section id="contact" class="contact-section"><div style="max-width:640px;margin:0 auto;"><div class="form-card reveal"><div style="position:relative;z-index:1;"><h3 style="font-size:clamp(1.4rem,3.5vw,2rem);font-weight:900;margin-bottom:.4rem;color:#fff;line-height:1.2;">השאירו פרטים, ננתח את הפרסום הנוכחי שלכם ונבדוק התאמה:</h3><form id="contactForm" onsubmit="handleSubmit(event)" style="margin-top:1.5rem;"><div class="form-row"><div class="field-group"><label class="field-label">שם מלא *</label><input type="text" placeholder="הכנס שם מלא" class="field" required></div><div class="field-group"><label class="field-label">טלפון ישיר *</label><input type="tel" placeholder="05X-XXXXXXX" class="field" dir="ltr" pattern="[0-9]+" inputmode="numeric" title="נא להזין ספרות בלבד" required></div></div><div class="field-group" style="margin-top:1rem;"><label class="field-label">אימייל *</label><input type="email" placeholder="email@example.com" class="field" dir="ltr" required></div><div class="field-group" style="margin-top:1rem;"><label class="field-label">תחום העסק / קישור לאתר או לדף *</label><input type="text" placeholder='תחום העסק / אתר' class="field" required></div><div style="margin-top:1rem;"><label style="display:block;font-size:.9rem;font-weight:700;color:#ccc;margin-bottom:.7rem;">תקציב פרסום חודשי בממומן:</label><div class="budget-grid"><label class="radio-item"><input type="checkbox" name="budget[]" value="under10k"><div class="radio-dot"></div><span class="radio-label">פחות מ-10,000 ₪</span></label><label class="radio-item"><input type="checkbox" name="budget[]" value="10k-30k"><div class="radio-dot"></div><span class="radio-label">10,000 ₪ – 30,000 ₪</span></label><label class="radio-item"><input type="checkbox" name="budget[]" value="over30k"><div class="radio-dot"></div><span class="radio-label">מעל 30,000 ₪</span></label></div></div><button type="submit" class="btn-lime lime-glow" style="padding:18px;font-size:1.1rem;border-radius:1.1rem;width:100%;margin-top:1.5rem;color:#050505;">שליחת בקשה לבדיקת התאמה ←</button></form><div id="form-success" style="display:none;text-align:center;padding:2rem 0;"><div style="font-size:3.5rem;margin-bottom:.8rem;">✅</div><h3 class="lime lime-shadow" style="font-size:1.9rem;font-weight:900;margin-bottom:.5rem;">קיבלנו!</h3><p style="color:var(--grey);line-height:1.7;font-size:1.05rem;">ניצור איתכם קשר תוך 24 שעות.</p></div></div></div></div></section><div class="divider"></div>
-<footer style="padding:2rem 1.25rem;text-align:center;"><div style="display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:.7rem;"><div class="logo-b">B</div><span style="font-weight:900;font-size:1.1rem;">Baduk AI</span><span style="color:#333;margin:0 .3rem;">|</span><span style="color:#555;font-size:.9rem;">בדוק שזה AI</span></div><p style="color:#2a2a2a;font-size:.82rem;">© 2026 Baduk AI. כל הזכויות שמורות.</p><button onclick="openPrivacy()" style="background:none;border:none;color:#444;font-size:.82rem;cursor:pointer;font-family:'Assistant',sans-serif;margin-top:.4rem;text-decoration:underline;">תנאי שימוש ומדיניות פרטיות</button></footer>
-<div id="privacy-modal" class="privacy-overlay">
+<a href="#main" class="skip-link">דלג לתוכן</a>
+<div id="scroll-progress"></div>
+
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="#hero" class="brand"><div class="logo-b">B</div><div><span class="brand-name">Baduk AI</span><span class="brand-sub">בדוק שזה AI</span></div></a>
+    <nav class="main-nav">
+      <a href="#portfolio">עבודות</a>
+      <a href="#about">מי אנחנו</a>
+      <a href="#testimonials">לקוחות</a>
+      <a href="#hero" class="nav-cta btn-lime" data-scroll-to-form>בואו נדבר</a>
+    </nav>
+    <button class="menu-btn" id="menu-toggle" aria-label="פתח תפריט" aria-expanded="false" aria-controls="mobile-menu">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="#portfolio">עבודות</a>
+    <a href="#about">מי אנחנו</a>
+    <a href="#testimonials">לקוחות</a>
+    <a href="#hero" class="nav-cta btn-lime" data-scroll-to-form>בואו נדבר</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<section class="hero" id="hero">
+  <div class="hero-shape hero-shape-1" aria-hidden="true"></div>
+  <div class="hero-shape hero-shape-2" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-top reveal">
+      <div class="hero-badge">במיוחד לבעלי עסקים שרוצים להפוך את התוכן שלהם למכונת גיוס לקוחות.</div>
+      <h1 class="hero-title"><span>אנחנו לא עוד סטודיו שמייצר סרטונים.</span><span class="lime">אנחנו יוצרים תוכן שמביא תוצאות.</span></h1>
+      <div class="hero-body">
+        <p>אנחנו מחברים בין שיווק, קריאייטיב וטכנולוגיית AI כדי לבנות לעסק שלכם תוכן שעוצר את העין, מעביר את המסר הנכון וגורם ללקוחות להתקדם.</p>
+        <p>בלי ימי צילום, בלי לעמוד מול מצלמה ובלי לבזבז זמן על תוכן שנראה כמו כולם.</p>
+      </div>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-form-wrap reveal">
+        <div class="form-card">
+          <h2 class="form-title">בואו נבדוק אם זה מתאים לעסק שלכם</h2>
+          <form name="lead-form" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="leadForm" novalidate>
+            <input type="hidden" name="form-name" value="lead-form">
+            <p style="display:none">
+              <label>אל תמלאו שדה זה: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+            </p>
+            <div class="form-row">
+              <div class="field-group">
+                <label class="field-label" for="lead-name">שם מלא</label>
+                <input class="field" type="text" id="lead-name" name="name" placeholder="איך קוראים לך?" required autocomplete="name">
+                <span class="field-error" id="err-name" role="alert"></span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="lead-phone">טלפון</label>
+                <input class="field" type="tel" id="lead-phone" name="phone" placeholder="מה המספר שלך?" required autocomplete="tel" inputmode="tel" dir="ltr" style="text-align:right">
+                <span class="field-error" id="err-phone" role="alert"></span>
+              </div>
+            </div>
+            <div class="consent-row">
+              <input type="checkbox" id="lead-consent" name="consent" required>
+              <label for="lead-consent">אני מאשר/ת שקראתי ואני מסכים/ה ל<a href="#" data-open-privacy>תקנון האתר ולמדיניות הפרטיות</a>.</label>
+            </div>
+            <span class="field-error" id="err-consent" role="alert"></span>
+            <button type="submit" class="btn-lime btn-block form-submit" id="leadSubmit">אני רוצה תוכן שמביא תוצאות</button>
+            <p class="form-micro">שיחת התאמה קצרה וללא התחייבות</p>
+            <p class="form-status" id="formStatus" aria-live="polite"></p>
+          </form>
+          <div class="form-success" id="formSuccess" style="display:none" aria-live="polite">
+            <div class="check">✅</div>
+            <h3>קיבלנו את הפרטים!</h3>
+            <p>ניצור איתכם קשר בהקדם לתיאום שיחת התאמה.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="portfolio-section" id="portfolio">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="sec-title"><span>לא צריך לדמיין.</span><span>פשוט תראו.</span></h2>
+      <p class="sec-sub">חלק קטן מהתוכן שכבר הפקנו לבעלי עסקים.</p>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="marquee-row dir-a" id="marqueeRowA"><div class="marquee-track" id="marqueeTrackA"></div></div>
+    <div class="marquee-row dir-b" id="marqueeRowB"><div class="marquee-track" id="marqueeTrackB"></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="about-section" id="about">
+  <div class="wrap-narrow">
+    <h2 class="about-heading reveal">היום, עם AI, כל הדבר הזה קיבל כוח חדש.</h2>
+    <div class="about-body reveal">
+      <p>כבר שנים שאנחנו חיים את העולם של וידאו, סושיאל, קריאייטיב ושיווק.<br>ראינו <u>מה גורם לאנשים לעצור</u>, מה גורם להם לדלג, ומה גורם להם <u>להשאיר פרטים</u>.</p>
+      <p class="pull-quote">היום, עם AI, כל הדבר הזה קיבל כוח חדש.</p>
+      <p>ב־Baduk AI אנחנו מחברים בין כתיבה שיווקית, הבנת קהל, הפקה ויזואלית, דמויות AI, כפילים דיגיטליים וקריאייטיב —<br>כדי לבנות לעסק שלכם <strong>תוכן חד, זכיר, ומכוון תוצאה</strong>.</p>
+      <p>תוכן שלא נוצר רק כדי "שיהיה מה להעלות".<br><strong>לא עוד סרטון שנראה כמו כולם.</strong><br>לא עוד יום צילום, טייקים, תיאומים, לחץ מול מצלמה ובזבוז זמן.</p>
+      <p>אנחנו לוקחים את מה שאתם מוכרים, מבינים <u>מה הלקוח שלכם באמת צריך לשמוע</u>,<br>והופכים את זה לתוכן שיכול לעבוד בשבילכם שוב ושוב —</p>
+      <p>כי בסוף, מי שרוצה שיתייחסו אליו כמו <strong>מותג מוביל</strong> —<br>צריך להיראות, להישמע ולהרגיש כמו <strong>מותג מוביל</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="testi-section" id="testimonials">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="sec-title"><span>אל תאמינו לנו.</span><span>תקשיבו ללקוחות שלנו.</span></h2>
+      <div class="sec-sub" style="display:flex;flex-direction:column;gap:.4rem">
+        <p>אפשר לספר לכם כמה אנחנו טובים.</p>
+        <p>אבל אנחנו מעדיפים לתת ללקוחות שלנו לדבר במקומנו.</p>
+        <p>שיחות וואטסאפ, הקלטות ותגובות אמיתיות שקיבלנו אחרי שהתוכן עלה לאוויר.</p>
+      </div>
+    </div>
+    <div class="wall reveal" id="testiWall"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="case-section" id="case-study">
+  <div class="case-inner">
+    <h2 class="sec-title reveal"><span>לא מספרים לכם על תוצאות.</span><span>מראים לכם אותן.</span></h2>
+    <div class="case-shot reveal">
+      <img src="https://res.cloudinary.com/dhc7bqkan/image/upload/q_auto,f_auto/v1783670850/2323_mdwetq.png" alt="צילום מסך של הודעת לקוח על תוצאות הקמפיין" loading="lazy">
+    </div>
+    <div class="case-body reveal">
+      <p>זו הודעה שקיבלנו מלקוח שלנו, המרפאה הפרטית.</p>
+      <p>הפקנו עבורו פרסומת עם דמות AI, והסרטון הגיע ליותר מ־300,000 צפיות.</p>
+      <p>אבל מבחינתנו, <strong>מספר הצפיות הוא רק חלק מהסיפור</strong>.</p>
+      <p>המטרה הייתה לייצר <u>תוכן שמביא פניות אמיתיות לעסק</u> — וזה בדיוק מה שקרה.</p>
+      <p>כי בסוף, אנחנו לא מודדים הצלחה לפי כמה הסרטון נראה יפה.</p>
+      <p><strong>אנחנו מודדים אותה לפי מה שהוא עושה לעסק</strong>.</p>
+    </div>
+    <div class="case-closing reveal">
+      <div class="case-number">300,000+ צפיות.</div>
+      <p class="case-lead-in"><u>אבל זו לא הייתה המטרה</u>.</p>
+      <p class="pull-quote">המטרה הייתה לגרום לאנשים לעצור, להתעניין ולהתקדם.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="cta-section" id="final-cta">
+  <div class="cta-inner reveal">
+    <h2 class="cta-title">הגיע הזמן שהתוכן שלכם יתחיל לעבוד בשבילכם.</h2>
+    <p class="cta-body">בואו נבדוק אם אפשר להפוך את מה שאתם מוכרים לתוכן שאנשים עוצרים עליו, זוכרים אותו ומתקדמים ממנו.</p>
+    <button class="btn-lime cta-btn" data-scroll-to-form>אני רוצה לבדוק התאמה</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-brand"><div class="logo-b">B</div><span style="font-weight:900;font-size:1.05rem">Baduk AI</span></div>
+  <p class="footer-copy">© 2026 Baduk AI. כל הזכויות שמורות.</p>
+  <button class="footer-legal" data-open-privacy>תנאי שימוש ומדיניות פרטיות</button>
+</footer>
+
+<div class="privacy-overlay" id="privacyModal">
   <div class="privacy-box" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
-    <button class="privacy-close" onclick="closePrivacy()" aria-label="סגירה">×</button>
+    <button class="privacy-close" id="privacyClose" aria-label="סגירה">×</button>
     <span id="privacy-title" class="privacy-title">תנאי שימוש ומדיניות פרטיות</span>
     <h3>תנאי השימוש באתר</h3>
     <p>השימוש בתכני האתר מותר לצורך אישי ופרטי בלבד. חל איסור מוחלט להעתיק, לשכפל, להפיץ, למכור או לעשות כל שימוש מסחרי בתכנים, בטקסטים, בעיצובים או בסרטונים המוצגים באתר ללא קבלת אישור מפורש מראש ובכתב מבעלי החברה.</p>
@@ -95,34 +447,360 @@
     <p>כל משתמש זכאי לעיין במידע שנשמר עליו, לבקש לתקנו או למחוק אותו בהתאם לחוק הגנת הפרטיות התשמ״א 1981.</p>
   </div>
 </div>
-<button id="accessibility-toggle" class="accessibility-btn" aria-label="פתח תפריט נגישות">♿</button>
-<div id="accessibility-panel" class="accessibility-panel">
-  <div class="accessibility-title">הגדרות נגישות</div>
-  <label class="accessibility-row"><span>הגדלת טקסט</span><input type="checkbox" data-accessibility="text"><span class="toggle-switch"></span></label>
-  <label class="accessibility-row"><span>ניגודיות גבוהה</span><input type="checkbox" data-accessibility="contrast"><span class="toggle-switch"></span></label>
-  <label class="accessibility-row"><span>הדגשת קישורים</span><input type="checkbox" data-accessibility="links"><span class="toggle-switch"></span></label>
-  <label class="accessibility-row"><span>הפסקת אנימציות</span><input type="checkbox" data-accessibility="animations"><span class="toggle-switch"></span></label>
-  <label class="accessibility-row"><span>קו הנחייה לקריאה</span><input type="checkbox" data-accessibility="guide"><span class="toggle-switch"></span></label>
-  <div class="accessibility-footer">אתר זה עומד בדרישות תקן נגישות ישראלי AA לפי חוק שוויון זכויות לאנשים עם מוגבלות</div>
+
+<button id="a11yToggle" class="a11y-btn" aria-label="פתח תפריט נגישות" aria-expanded="false" aria-controls="a11yPanel">♿</button>
+<div id="a11yPanel" class="a11y-panel">
+  <div class="a11y-title">הגדרות נגישות</div>
+  <label class="a11y-row"><span>הגדלת טקסט</span><input type="checkbox" data-a11y="text"><span class="toggle"></span></label>
+  <label class="a11y-row"><span>ניגודיות גבוהה</span><input type="checkbox" data-a11y="contrast"><span class="toggle"></span></label>
+  <label class="a11y-row"><span>הדגשת קישורים</span><input type="checkbox" data-a11y="links"><span class="toggle"></span></label>
+  <label class="a11y-row"><span>הפסקת אנימציות</span><input type="checkbox" data-a11y="animations"><span class="toggle"></span></label>
 </div>
+
+<div class="media-overlay" id="mediaModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="תצוגת מדיה">
+  <div class="media-box" id="mediaBox">
+    <button class="media-close" id="mediaClose" aria-label="סגירה">×</button>
+    <div id="mediaContent"></div>
+  </div>
+</div>
+
 <script>
-function toggleMenu(){document.getElementById('mobile-menu').classList.toggle('open')}
-function handleSubmit(e){if(!e.target.checkValidity())return;e.preventDefault();document.getElementById('contactForm').style.display='none';document.getElementById('form-success').style.display='block'}
-function openPrivacy(){document.getElementById('privacy-modal').style.display='flex';document.body.style.overflow='hidden'}
-function closePrivacy(){document.getElementById('privacy-modal').style.display='none';document.body.style.overflow=''}
-document.getElementById('privacy-modal').addEventListener('click',function(e){if(e.target===this)closePrivacy()});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closePrivacy()});
-const prefersReduced=matchMedia('(prefers-reduced-motion: reduce)').matches,isCoarse=matchMedia('(pointer: coarse)').matches,canHover=matchMedia('(hover: hover)').matches;
-document.addEventListener('DOMContentLoaded',()=>{const header=document.getElementById('site-header'),progress=document.getElementById('scroll-progress'),qualifyStack=document.getElementById('qualify-stack');function updateScroll(){const max=document.documentElement.scrollHeight-innerHeight,pct=max>0?scrollY/max*100:0;progress.style.width=pct+'%';header.classList.toggle('scrolled',scrollY>12);if(qualifyStack){const r=qualifyStack.getBoundingClientRect(),raw=(innerHeight-r.top)/(r.height+innerHeight);qualifyStack.style.setProperty('--qualify-progress',Math.max(0,Math.min(1,raw))*100+'%')}}updateScroll();addEventListener('scroll',updateScroll,{passive:true});addEventListener('resize',updateScroll);
-if(document.querySelector('.swiper-videos')&&window.Swiper)new Swiper('.swiper-videos',{slidesPerView:innerWidth<=768?1.2:'auto',spaceBetween:innerWidth<=768?12:14,grabCursor:true,loop:true,pagination:{el:'.swiper-videos .swiper-pagination',clickable:true},breakpoints:{769:{slidesPerView:'auto',spaceBetween:14}}});
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('revealed'),Number(e.target.dataset.delay||0));io.unobserve(e.target)}}),{threshold:.15,rootMargin:'0px 0px -8% 0px'});document.querySelectorAll('.reveal,.q-card').forEach((el,i)=>{if(el.classList.contains('q-card'))el.dataset.delay=i*80;io.observe(el)});
-const co=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){animateCounter(e.target);co.unobserve(e.target)}}),{threshold:.6});document.querySelectorAll('.ticker-num[data-count]').forEach(el=>co.observe(el));function animateCounter(el){const target=+el.dataset.count,suffix=el.dataset.suffix||'',start=performance.now(),dur=1200;if(prefersReduced){el.textContent=new Intl.NumberFormat('en-US').format(target)+suffix;return}function tick(now){const t=Math.min(1,(now-start)/dur),v=Math.round(target*(1-Math.pow(1-t,3)));el.textContent=new Intl.NumberFormat('en-US').format(v)+suffix;if(t<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)}
-if(canHover&&!isCoarse&&!prefersReduced)document.querySelectorAll('.video-card').forEach(card=>{card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(850px) rotateX(${y*-10}deg) rotateY(${x*12}deg) translateY(-4px) scale(1.02)`});card.addEventListener('mouseleave',()=>card.style.transform='')});
-document.querySelectorAll('.team-card').forEach(card=>{card.addEventListener('click',()=>{if(innerWidth<=768||isCoarse)card.classList.toggle('is-flipped')});card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();card.classList.toggle('is-flipped')}})});initAccessibility();initCursor();initHeroScene()});
-document.querySelectorAll('.play-overlay').forEach(overlay=>{overlay.addEventListener('click',function(){const iframe=this.parentElement.querySelector('iframe');const currentSrc=iframe.src;iframe.src=currentSrc+'&autoplay=1';this.style.opacity='0';this.style.pointerEvents='none'})});
-function initCursor(){if(isCoarse||prefersReduced)return;const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring'),blob=document.getElementById('ambient-blob');let x=innerWidth/2,y=innerHeight/2,rx=x,ry=y,bx=0,by=0;addEventListener('mousemove',e=>{x=e.clientX;y=e.clientY;dot.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%)`;bx=(e.clientX/innerWidth-.5)*-42;by=(e.clientY/innerHeight-.5)*-42},{passive:true});(function frame(){rx+=(x-rx)*.16;ry+=(y-ry)*.16;ring.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;blob.style.setProperty('--blob-x',bx+'px');blob.style.setProperty('--blob-y',by+'px');requestAnimationFrame(frame)})()}
-function initAccessibility(){const btn=document.getElementById('accessibility-toggle'),panel=document.getElementById('accessibility-panel');let guideLine=null,guideHandler=null;btn.addEventListener('click',e=>{e.stopPropagation();panel.style.display=panel.style.display==='block'?'none':'block'});panel.addEventListener('click',e=>e.stopPropagation());document.addEventListener('click',e=>{if(!panel.contains(e.target)&&e.target!==btn)panel.style.display='none'});document.querySelectorAll('[data-accessibility]').forEach(input=>{input.addEventListener('change',()=>{const on=input.checked,type=input.dataset.accessibility;if(type==='text')document.documentElement.style.fontSize=on?'120%':'';if(type==='contrast')document.body.classList.toggle('high-contrast',on);if(type==='links')document.body.classList.toggle('highlight-links',on);if(type==='animations')document.body.classList.toggle('no-animations',on);if(type==='guide'){if(on){guideLine=document.createElement('div');guideLine.style.cssText='position:fixed;left:0;top:0;width:100%;height:3px;background:rgba(199,255,0,0.5);pointer-events:none;z-index:99997;';document.body.appendChild(guideLine);guideHandler=e=>{guideLine.style.top=e.clientY+'px'};document.addEventListener('mousemove',guideHandler)}else{if(guideHandler)document.removeEventListener('mousemove',guideHandler);if(guideLine)guideLine.remove();guideLine=null;guideHandler=null}}})})}
-function initHeroScene(){const canvas=document.getElementById('hero-canvas'),heroSection=document.querySelector('.hero');if(!canvas||!heroSection||!window.THREE||!THREE.FontLoader||!THREE.TextGeometry||prefersReduced)return;heroSection.style.position='relative';const mobile=innerWidth<768;const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(45,1,.1,100);camera.position.z=mobile?11:9;const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setClearColor(0x000000,0);renderer.setPixelRatio(Math.min(devicePixelRatio,2));scene.add(new THREE.AmbientLight(0xffffff,.5));const pointLight1=new THREE.PointLight(0xC7FF00,3);pointLight1.position.set(5,5,5);scene.add(pointLight1);const pointLight2=new THREE.PointLight(0xffffff,1);pointLight2.position.set(-5,-3,4);scene.add(pointLight2);let mesh=null,raf=null,running=true;function resize(){const w=heroSection.offsetWidth,h=heroSection.offsetHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}resize();addEventListener('resize',resize);new THREE.FontLoader().load('https://threejs.org/examples/fonts/helvetiker_bold.typeface.json',font=>{const geometry=new THREE.TextGeometry('B',{font:font,size:mobile?2.2:3.2,height:.9,curveSegments:16,bevelEnabled:true,bevelThickness:.06,bevelSize:.04,bevelSegments:8});geometry.center();const material=new THREE.MeshStandardMaterial({color:0xC7FF00,metalness:.5,roughness:.15});mesh=new THREE.Mesh(geometry,material);mesh.position.set(0,0,0);scene.add(mesh);animate()});function animate(){if(!running)return;raf=requestAnimationFrame(animate);if(mesh){mesh.rotation.y+=.007;mesh.rotation.x=Math.sin(Date.now()*.0004)*.12}renderer.render(scene,camera)}document.addEventListener('visibilitychange',()=>{running=!document.hidden;if(running&&!raf)animate();if(!running&&raf){cancelAnimationFrame(raf);raf=null}})}
+(function(){
+"use strict";
+var prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- helpers ---------- */
+function posterFor(url){
+  return url.replace('/upload/','/upload/q_auto,f_auto,so_0/').replace(/\.(mp4|mov)(\?.*)?$/i,'.jpg');
+}
+function videoSrcFor(url){
+  if(/\.mov(\?.*)?$/i.test(url)) return url.replace('/upload/','/upload/q_auto/').replace(/\.mov(\?.*)?$/i,'.mp4');
+  return url.replace('/upload/','/upload/q_auto/');
+}
+
+/* ---------- portfolio data ---------- */
+var PORTFOLIO_ROW_A = [
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1782072837/%D7%90%D7%99%D7%A0%D7%98%D7%A8%D7%95_%D7%92%D7%95%D7%A8%D7%93%D7%95%D7%9F_1_c1qfco.mp4",
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1782646011/0628_teovlw.mov",
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1783544105/%D7%A9%D7%95%D7%A8%D7%A3_%D7%AA%D7%A7%D7%A6%D7%99%D7%91_%D7%9E%D7%9E%D7%95%D7%9E%D7%9F_V_bgkadd.mp4",
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1783669930/%D7%9C%D7%99%D7%9C%D7%9A_%D7%92%D7%A8%D7%A1%D7%90_2_%D7%AA%D7%99%D7%A7%D7%95%D7%9F_1_omiztg.mp4",
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1783670085/%D7%A7%D7%9E%D7%A4%D7%99%D7%99%D7%9F_%D7%A1%D7%95%D7%9B%D7%A0%D7%95%D7%99%D7%95%D7%AA_%D7%9E%D7%95%D7%93%D7%A2%D7%94_2_%D7%A1%D7%95%D7%A4%D7%99_1_1_fwlice.mp4"
+];
+var PORTFOLIO_ROW_B = [
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1782072930/%D7%A1%D7%A0%D7%98%D7%95%D7%A8%D7%99_%D7%90%D7%99%D7%A0%D7%A1%D7%98%D7%94_2_es53do.mp4",
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1783544031/%D7%A1%D7%A8%D7%98%D7%95%D7%9F_1_%D7%AA%D7%99%D7%A7%D7%95%D7%9F_5_V3_d63zth.mp4",
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1783669872/%D7%90%D7%99%D7%99%D7%9C%D7%95%D7%9F_%D7%92%D7%A8%D7%A1%D7%90_1_tkzlfy.mp4",
+  "https://res.cloudinary.com/dhc7bqkan/video/upload/v1783669992/%D7%A1%D7%A8%D7%98%D7%95%D7%9F_%D7%97%D7%A0%D7%99%D7%94_%D7%A1%D7%95%D7%A4%D7%99_2_mrtqbx.mp4"
+];
+
+function buildVideoCard(url, label){
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'video-card';
+  btn.setAttribute('aria-label', label);
+  btn.dataset.video = videoSrcFor(url);
+  var img = document.createElement('img');
+  img.src = posterFor(url);
+  img.alt = '';
+  img.loading = 'lazy';
+  img.onerror = function(){ this.style.display = 'none'; };
+  var badge = document.createElement('span');
+  badge.className = 'play-badge';
+  badge.innerHTML = '<span aria-hidden="true">▶</span>';
+  btn.appendChild(img);
+  btn.appendChild(badge);
+  return btn;
+}
+
+var MARQUEE_SPEED_PX_S = 30;
+
+function setupMarquee(trackEl, urls, labelPrefix){
+  function appendPass(){
+    urls.forEach(function(url, i){
+      trackEl.appendChild(buildVideoCard(url, labelPrefix + ' ' + (i + 1)));
+    });
+  }
+  function build(){
+    trackEl.innerHTML = '';
+    trackEl.style.animationDuration = '0s';
+    var minGroupWidth = Math.max(window.innerWidth * 1.25, 1400);
+    var passes = 0;
+    do {
+      appendPass();
+      passes++;
+    } while (trackEl.scrollWidth < minGroupWidth && passes < 8);
+    var groupWidth = trackEl.scrollWidth;
+    for (var p = 0; p < passes; p++) appendPass();
+    trackEl.style.animationDuration = (groupWidth / MARQUEE_SPEED_PX_S) + 's';
+  }
+  build();
+  var resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(build, 250);
+  });
+}
+setupMarquee(document.getElementById('marqueeTrackA'), PORTFOLIO_ROW_A, 'פתח וידאו פורטפוליו');
+setupMarquee(document.getElementById('marqueeTrackB'), PORTFOLIO_ROW_B, 'פתח וידאו פורטפוליו');
+
+/* ---------- testimonials wall ---------- */
+var TESTI_ITEMS = [
+  {type:'video', url:'https://res.cloudinary.com/dhc7bqkan/video/upload/v1783670672/45_auwinz.mp4', label:'פתח תגובת לקוח 1'},
+  {type:'image', url:'https://res.cloudinary.com/dhc7bqkan/image/upload/q_auto,f_auto/v1783670644/2_g9rjq2.png', label:'הגדל צילום מסך וואטסאפ 1'},
+  {type:'video', url:'https://res.cloudinary.com/dhc7bqkan/video/upload/v1783670659/56_mopn1q.mp4', label:'פתח תגובת לקוח 2'},
+  {type:'image', url:'https://res.cloudinary.com/dhc7bqkan/image/upload/q_auto,f_auto/v1783670643/1_cnpvsq.png', label:'הגדל צילום מסך וואטסאפ 2'},
+  {type:'video', url:'https://res.cloudinary.com/dhc7bqkan/video/upload/v1783670653/23_jbzrxv.mp4', label:'פתח תגובת לקוח 3'}
+];
+var wall = document.getElementById('testiWall');
+TESTI_ITEMS.forEach(function(item){
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.setAttribute('aria-label', item.label);
+  var img = document.createElement('img');
+  img.loading = 'lazy';
+  img.alt = '';
+  if(item.type === 'video'){
+    btn.className = 'wall-item video';
+    btn.dataset.video = videoSrcFor(item.url);
+    img.src = posterFor(item.url);
+    img.onerror = function(){ this.style.display = 'none'; };
+    var badge = document.createElement('span');
+    badge.className = 'play-badge';
+    badge.innerHTML = '<span aria-hidden="true">▶</span>';
+    btn.appendChild(img);
+    btn.appendChild(badge);
+  } else {
+    btn.className = 'wall-item shot';
+    btn.dataset.image = item.url;
+    img.src = item.url;
+    btn.appendChild(img);
+  }
+  wall.appendChild(btn);
+});
+
+/* ---------- media modal ---------- */
+var mediaModal = document.getElementById('mediaModal');
+var mediaContent = document.getElementById('mediaContent');
+var mediaClose = document.getElementById('mediaClose');
+var lastFocused = null;
+
+function openMedia(type, src){
+  lastFocused = document.activeElement;
+  mediaContent.innerHTML = '';
+  if(type === 'video'){
+    var v = document.createElement('video');
+    v.src = src;
+    v.controls = true;
+    v.playsInline = true;
+    v.autoplay = true;
+    mediaContent.appendChild(v);
+  } else {
+    var img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    mediaContent.appendChild(img);
+  }
+  mediaModal.classList.add('open');
+  mediaModal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  mediaClose.focus();
+}
+function closeMedia(){
+  var v = mediaContent.querySelector('video');
+  if(v){ v.pause(); v.removeAttribute('src'); v.load(); }
+  mediaContent.innerHTML = '';
+  mediaModal.classList.remove('open');
+  mediaModal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if(lastFocused) lastFocused.focus();
+}
+document.addEventListener('click', function(e){
+  var trigger = e.target.closest('[data-video],[data-image]');
+  if(trigger){
+    if(trigger.dataset.video) openMedia('video', trigger.dataset.video);
+    else if(trigger.dataset.image) openMedia('image', trigger.dataset.image);
+  }
+});
+mediaClose.addEventListener('click', closeMedia);
+mediaModal.addEventListener('click', function(e){ if(e.target === mediaModal) closeMedia(); });
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    if(mediaModal.classList.contains('open')) closeMedia();
+    if(privacyModal.classList.contains('open')) closePrivacy();
+  }
+  if(e.key === 'Tab' && mediaModal.classList.contains('open')){
+    var focusables = mediaModal.querySelectorAll('button, video, [href], input, [tabindex]:not([tabindex="-1"])');
+    if(!focusables.length) return;
+    var first = focusables[0], last = focusables[focusables.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+});
+
+/* ---------- privacy modal ---------- */
+var privacyModal = document.getElementById('privacyModal');
+var privacyClose = document.getElementById('privacyClose');
+var privacyLastFocused = null;
+function openPrivacy(){
+  privacyLastFocused = document.activeElement;
+  privacyModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  privacyClose.focus();
+}
+function closePrivacy(){
+  privacyModal.classList.remove('open');
+  document.body.style.overflow = '';
+  if(privacyLastFocused) privacyLastFocused.focus();
+}
+document.querySelectorAll('[data-open-privacy]').forEach(function(el){
+  el.addEventListener('click', function(e){ e.preventDefault(); openPrivacy(); });
+});
+privacyClose.addEventListener('click', closePrivacy);
+privacyModal.addEventListener('click', function(e){ if(e.target === privacyModal) closePrivacy(); });
+
+/* ---------- header / scroll progress / reveal ---------- */
+var header = document.getElementById('site-header');
+var progress = document.getElementById('scroll-progress');
+function updateScroll(){
+  var max = document.documentElement.scrollHeight - innerHeight;
+  var pct = max > 0 ? (scrollY / max) * 100 : 0;
+  progress.style.width = pct + '%';
+  header.classList.toggle('scrolled', scrollY > 12);
+}
+updateScroll();
+addEventListener('scroll', updateScroll, {passive:true});
+addEventListener('resize', updateScroll);
+
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){ entry.target.classList.add('revealed'); io.unobserve(entry.target); }
+  });
+}, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+/* ---------- mobile menu ---------- */
+var menuToggle = document.getElementById('menu-toggle');
+var mobileMenu = document.getElementById('mobile-menu');
+menuToggle.addEventListener('click', function(){
+  var open = mobileMenu.classList.toggle('open');
+  menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+document.querySelectorAll('#mobile-menu a').forEach(function(a){
+  a.addEventListener('click', function(){ mobileMenu.classList.remove('open'); menuToggle.setAttribute('aria-expanded','false'); });
+});
+
+/* ---------- scroll-to-form ---------- */
+document.querySelectorAll('[data-scroll-to-form]').forEach(function(el){
+  el.addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('hero').scrollIntoView({behavior: prefersReduced ? 'auto' : 'smooth'});
+    setTimeout(function(){ document.getElementById('lead-name').focus(); }, prefersReduced ? 0 : 500);
+  });
+});
+
+/* ---------- accessibility widget ---------- */
+var a11yToggle = document.getElementById('a11yToggle');
+var a11yPanel = document.getElementById('a11yPanel');
+a11yToggle.addEventListener('click', function(e){
+  e.stopPropagation();
+  var open = a11yPanel.classList.toggle('open');
+  a11yToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+a11yPanel.addEventListener('click', function(e){ e.stopPropagation(); });
+document.addEventListener('click', function(e){
+  if(!a11yPanel.contains(e.target) && e.target !== a11yToggle){
+    a11yPanel.classList.remove('open');
+    a11yToggle.setAttribute('aria-expanded', 'false');
+  }
+});
+document.querySelectorAll('[data-a11y]').forEach(function(input){
+  input.addEventListener('change', function(){
+    var on = input.checked, type = input.dataset.a11y;
+    if(type === 'text') document.documentElement.style.fontSize = on ? '112%' : '';
+    if(type === 'contrast') document.body.classList.toggle('high-contrast', on);
+    if(type === 'links') document.body.classList.toggle('highlight-links', on);
+    if(type === 'animations') document.body.classList.toggle('no-animations', on);
+  });
+});
+
+/* ---------- lead form ---------- */
+var leadForm = document.getElementById('leadForm');
+var formStatus = document.getElementById('formStatus');
+var formSuccess = document.getElementById('formSuccess');
+var submitBtn = document.getElementById('leadSubmit');
+
+function setFieldError(id, message){
+  var input = document.getElementById(id);
+  var err = document.getElementById('err-' + id.replace('lead-',''));
+  if(message){
+    input.setAttribute('aria-invalid', 'true');
+    if(err) err.textContent = message;
+  } else {
+    input.removeAttribute('aria-invalid');
+    if(err) err.textContent = '';
+  }
+}
+
+function validateForm(){
+  var valid = true;
+  var name = document.getElementById('lead-name');
+  var phone = document.getElementById('lead-phone');
+  var consent = document.getElementById('lead-consent');
+  var errConsent = document.getElementById('err-consent');
+
+  if(!name.value.trim()){ setFieldError('lead-name','נא להזין שם מלא'); valid = false; }
+  else setFieldError('lead-name', '');
+
+  var phoneDigits = phone.value.replace(/[^0-9]/g,'');
+  if(!phoneDigits || phoneDigits.length < 9 || phoneDigits.length > 10){
+    setFieldError('lead-phone','נא להזין מספר טלפון תקין'); valid = false;
+  } else setFieldError('lead-phone', '');
+
+  if(!consent.checked){ errConsent.textContent = 'יש לאשר את התקנון ומדיניות הפרטיות כדי להמשיך'; valid = false; }
+  else errConsent.textContent = '';
+
+  return valid;
+}
+
+function encodeForm(form){
+  var data = new FormData(form);
+  return new URLSearchParams(data).toString();
+}
+
+leadForm.addEventListener('submit', function(e){
+  e.preventDefault();
+  formStatus.textContent = '';
+  formStatus.classList.remove('error');
+  if(!validateForm()) return;
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'שולח...';
+
+  fetch('/', {
+    method: 'POST',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: encodeForm(leadForm)
+  }).then(function(response){
+    if(response.ok){
+      leadForm.style.display = 'none';
+      formSuccess.style.display = 'block';
+      // META PIXEL PLACEHOLDER: fire Lead event only after confirmed success
+      // if (typeof fbq === 'function') fbq('track', 'Lead');
+      // GOOGLE ANALYTICS / GTM PLACEHOLDER: push Lead event only after confirmed success
+      // if (typeof gtag === 'function') gtag('event', 'generate_lead');
+    } else {
+      throw new Error('submission failed');
+    }
+  }).catch(function(){
+    formStatus.textContent = 'לא הצלחנו לשלוח את הטופס כרגע. נסו שוב או צרו קשר ישירות.';
+    formStatus.classList.add('error');
+  }).finally(function(){
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'אני רוצה תוכן שמביא תוצאות';
+  });
+});
+
+})();
 </script>
 </body>
 </html>
